@@ -1,4 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using MyApi.Data;
 using MyApi.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +13,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+//inregistrare AplicatieDbContext cu SQLite
+builder.Services.AddDbContext<AplicatieDbContext>(options =>
+    options.UseSqlite("Data Source=produse.db"));
 
 var app = builder.Build();
 

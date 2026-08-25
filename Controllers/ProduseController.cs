@@ -16,9 +16,9 @@ namespace MyApi.Controllers
         }
 
         [HttpGet]
-        public IActionResult ObtineProduse()
+        public async  Task<IActionResult> ObtineProduse()
         {
-            var produse = produsService.ObtineToateProdusele();
+            var produse = await produsService.ObtineToateProdusele();
             
             List<ProdusDto> produseDto = new List<ProdusDto>();
             foreach (Produs produs in produse )
@@ -35,9 +35,9 @@ namespace MyApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult ObtineProdus(int id)
+        public async Task<IActionResult> ObtineProdus(int id)
         {
-            var produs = produsService.ObtineProdus(id);
+            var produs = await produsService.ObtineProdus(id);
 
             if (produs == null)
                 return NotFound();
@@ -54,7 +54,7 @@ namespace MyApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreeazaProdus([FromBody] ProdusCreateDto produsCreateDto)
+        public async Task<IActionResult> CreeazaProdus([FromBody] ProdusCreateDto produsCreateDto)
         {
             Produs produs = new Produs
             {
@@ -62,7 +62,7 @@ namespace MyApi.Controllers
                 Pret = produsCreateDto.Pret
             };
 
-            Produs produsSalvat = produsService.AdaugaProdus(produs);
+            Produs produsSalvat = await produsService.AdaugaProdus(produs);
             ProdusDto produsDto = new ProdusDto
             {
                 Id = produsSalvat.Id,
@@ -74,7 +74,7 @@ namespace MyApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult ActualizeazaProdus(int id, [FromBody] ProdusUpdateDto produsUpdateDto)
+        public async Task<IActionResult> ActualizeazaProdus(int id, [FromBody] ProdusUpdateDto produsUpdateDto)
         {
             Produs produsActualizat = new Produs
             {
@@ -82,7 +82,7 @@ namespace MyApi.Controllers
                 Pret = produsUpdateDto.Pret
             };
 
-            Produs? produsSalvat = produsService.ActualizeazaProdus(id, produsActualizat);
+            Produs? produsSalvat = await produsService.ActualizeazaProdus(id, produsActualizat);
             if( produsSalvat == null ) 
                 return NotFound();
 
@@ -98,9 +98,9 @@ namespace MyApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult StergeProdus(int id) 
+        public async Task<IActionResult> StergeProdus(int id) 
         {
-            if(produsService.StergeProdus(id))
+            if(await produsService.StergeProdus(id))
             {
                 return NoContent();
             }

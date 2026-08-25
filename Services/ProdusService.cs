@@ -1,51 +1,57 @@
-﻿using MyApi.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using MyApi.Data;
+using MyApi.Models;
 namespace MyApi.Services
 {
     public class ProdusService : IProdusService
     {
-        public List<Produs> produse = new List<Produs> 
-        {new Produs(1, "Laptop", 2000),
-         new Produs(2, "Televizor", 2200),
-         new Produs(3, "Frigider", 1800)
-        };
-        public List<Produs> ObtineToateProdusele()
+        private readonly AplicatieDbContext context;
+        public ProdusService(AplicatieDbContext context)
         {
-            return produse;
-        }
-        public Produs? ObtineProdus(int id)
-        {
-            return produse.FirstOrDefault(x => x.Id == id);
+            this.context = context;
         }
 
-        public Produs AdaugaProdus(Produs produs)
+        public async Task<List<Produs>> ObtineToateProdusele()
         {
-            
-            produs.Id = produse.Max(p => p.Id) + 1;
+           return await context.Produse.ToListAsync(); 
+        }
+        public async Task<Produs?> ObtineProdus(int id)
+        {
+            return await context.Produse.FirstOrDefaultAsync(x => x.Id == id);
+        }
 
-            produse.Add(produs);
+        public async Task<Produs> AdaugaProdus(Produs produs)
+        {
+            await context.Produse.AddAsync(produs);
+            await context.SaveChangesAsync();
+
             return produs;
         }
 
-        public Produs? ActualizeazaProdus(int id, Produs produsActualizat) 
+        public async Task<Produs?> ActualizeazaProdus(int id, Produs produsActualizat) 
         {
-            Produs? produs = produse.FirstOrDefault(p => p.Id == id);
+            Produs? produs = await context.Produse.FirstOrDefaultAsync(p => p.Id == id);
             if (produs == null)
             {
                 return null;
             }
             produs.Nume = produsActualizat.Nume;
             produs.Pret = produsActualizat.Pret;
+            await context.SaveChangesAsync();
+
             return produs;
         }
 
-        public bool StergeProdus(int id)
+        public async Task<bool> StergeProdus(int id)
         {
-            Produs? produs = produse.FirstOrDefault(p =>p.Id == id);
+            Produs? produs = await context.Produse.FirstOrDefaultAsync(p =>p.Id == id);
             if(produs == null)
             {
                 return false;
             }
-            produse.Remove(produs);
+            context.Produse.Remove(produs);
+            await context.SaveChangesAsync();
+
             return true;
 
         }

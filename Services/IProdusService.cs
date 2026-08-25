@@ -3,10 +3,10 @@ namespace MyApi.Services
 {
     public interface IProdusService
     {
-        List<Produs> ObtineToateProdusele();
+        Task<List<Produs>> ObtineToateProdusele();
         Produs? ObtineProdus(int id);
         Produs AdaugaProdus(Produs produs);
-        public Produs? ActualizeazaProdus(int id, Produs produsActualizat);
-        public bool StergeProdus(int id);
+        Produs? ActualizeazaProdus(int id, Produs produsActualizat);
+        bool StergeProdus(int id);
     }
 }
