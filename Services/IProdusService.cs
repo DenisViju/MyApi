@@ -4,9 +4,9 @@ namespace MyApi.Services
     public interface IProdusService
     {
         Task<List<Produs>> ObtineToateProdusele();
-        Produs? ObtineProdus(int id);
-        Produs AdaugaProdus(Produs produs);
-        Produs? ActualizeazaProdus(int id, Produs produsActualizat);
-        bool StergeProdus(int id);
+        Task<Produs?> ObtineProdus(int id);
+        Task<Produs> AdaugaProdus(Produs produs);
+        Task<Produs?> ActualizeazaProdus(int id, Produs produsActualizat);
+        Task<bool> StergeProdus(int id);
     }
 }
