@@ -14,6 +14,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+    });
+
 //inregistrare AplicatieDbContext cu SQLite
 builder.Services.AddDbContext<AplicatieDbContext>(options =>
     options.UseSqlite("Data Source=produse.db"));
