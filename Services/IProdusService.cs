@@ -8,5 +8,6 @@ namespace MyApi.Services
         Task<Produs> AdaugaProdus(Produs produs);
         Task<Produs?> ActualizeazaProdus(int id, Produs produsActualizat);
         Task<bool> StergeProdus(int id);
+        Task<Categorie?> GasesteCategorie(int id);
     }
 }

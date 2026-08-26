@@ -27,7 +27,9 @@ namespace MyApi.Controllers
                 {
                     Id = produs.Id,
                     Nume = produs.Nume,
-                    Pret = produs.Pret
+                    Pret = produs.Pret,
+                    CategorieId = produs.CategorieId,
+                    NumeCategorie = produs.Categorie?.Nume
                 };
                 produseDto.Add( produsDto );
             }
@@ -46,7 +48,9 @@ namespace MyApi.Controllers
             {
                 Id = produs.Id,
                 Nume = produs.Nume,
-                Pret = produs.Pret
+                Pret = produs.Pret,
+                CategorieId = produs.CategorieId,
+                NumeCategorie = produs.Categorie?.Nume
             };
             return Ok(produsDto);
             
@@ -56,18 +60,28 @@ namespace MyApi.Controllers
         [HttpPost]
         public async Task<IActionResult> CreeazaProdus([FromBody] ProdusCreateDto produsCreateDto)
         {
+            Categorie? categorie = await produsService.GasesteCategorie(produsCreateDto.CategorieId);
+            if(categorie == null)
+                return NotFound();
+
             Produs produs = new Produs
             {
                 Nume = produsCreateDto.Nume,
-                Pret = produsCreateDto.Pret
+                Pret = produsCreateDto.Pret,
+                CategorieId = produsCreateDto.CategorieId,
+                
+
             };
+
 
             Produs produsSalvat = await produsService.AdaugaProdus(produs);
             ProdusDto produsDto = new ProdusDto
             {
                 Id = produsSalvat.Id,
                 Nume = produsSalvat.Nume,
-                Pret = produsSalvat.Pret
+                Pret = produsSalvat.Pret,
+                CategorieId = produsSalvat.CategorieId,
+                NumeCategorie = categorie.Nume
             };
 
             return CreatedAtAction(nameof(ObtineProdus), new { id = produsDto.Id },produsDto );
@@ -76,11 +90,19 @@ namespace MyApi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> ActualizeazaProdus(int id, [FromBody] ProdusUpdateDto produsUpdateDto)
         {
+            Categorie? categorie =
+                await produsService.GasesteCategorie(produsUpdateDto.CategorieId);
+
+            if (categorie == null)
+                return NotFound();
+
             Produs produsActualizat = new Produs
             {
                 Nume = produsUpdateDto.Nume,
-                Pret = produsUpdateDto.Pret
+                Pret = produsUpdateDto.Pret,
+                CategorieId = produsUpdateDto.CategorieId
             };
+            
 
             Produs? produsSalvat = await produsService.ActualizeazaProdus(id, produsActualizat);
             if( produsSalvat == null ) 
@@ -90,7 +112,10 @@ namespace MyApi.Controllers
             {
                 Id = produsSalvat.Id,
                 Nume = produsSalvat.Nume,
-                Pret = produsSalvat.Pret
+                Pret = produsSalvat.Pret,
+                CategorieId = produsSalvat.CategorieId,
+                NumeCategorie = categorie.Nume
+
             };
             return Ok( produsDto ); 
 

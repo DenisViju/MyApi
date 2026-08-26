@@ -13,11 +13,16 @@ namespace MyApi.Services
 
         public async Task<List<Produs>> ObtineToateProdusele()
         {
-           return await context.Produse.ToListAsync(); 
+           return await context.Produse
+                .Include(p => p.Categorie)
+                .ToListAsync(); 
         }
         public async Task<Produs?> ObtineProdus(int id)
         {
-            return await context.Produse.FirstOrDefaultAsync(x => x.Id == id);
+            return await context.Produse
+                .Include(p => p.Categorie)
+                .FirstOrDefaultAsync(x => x.Id == id);
+                
         }
 
         public async Task<Produs> AdaugaProdus(Produs produs)
@@ -30,7 +35,9 @@ namespace MyApi.Services
 
         public async Task<Produs?> ActualizeazaProdus(int id, Produs produsActualizat) 
         {
-            Produs? produs = await context.Produse.FirstOrDefaultAsync(p => p.Id == id);
+            Produs? produs = await context.Produse
+                .Include(p => p.Categorie)
+                .FirstOrDefaultAsync(p => p.Id == id);
             if (produs == null)
             {
                 return null;
@@ -53,6 +60,12 @@ namespace MyApi.Services
             await context.SaveChangesAsync();
 
             return true;
+
+        }
+        public async Task<Categorie?> GasesteCategorie(int id)
+        {
+            return await context.Categorii
+                .FirstOrDefaultAsync(c => c.Id == id);
 
         }
     }

@@ -9,13 +9,6 @@
         public int CategorieId { get; set; }
         public Categorie? Categorie { get; set; }
 
-        public Produs() { }
-        public Produs(int id, string nume, double pret, int categorieId)
-        {
-            Id = id;
-            Nume = nume;
-            Pret = pret;
-            CategorieId = categorieId;
-        }
+        
     }
 }
