@@ -2,6 +2,7 @@
 using MyApi.Models;
 using MyApi.DTOs;
 using MyApi.Services;
+using MyApi.Mappers;
 
 namespace MyApi.Controllers
 {
@@ -20,19 +21,10 @@ namespace MyApi.Controllers
         {
             var produse = await produsService.ObtineToateProdusele();
             
-            List<ProdusDto> produseDto = new List<ProdusDto>();
-            foreach (Produs produs in produse )
-            {
-                ProdusDto produsDto = new ProdusDto
-                {
-                    Id = produs.Id,
-                    Nume = produs.Nume,
-                    Pret = produs.Pret,
-                    CategorieId = produs.CategorieId,
-                    NumeCategorie = produs.Categorie?.Nume
-                };
-                produseDto.Add( produsDto );
-            }
+            List<ProdusDto> produseDto = produse
+                .Select(p => ProdusMapper.ToDto(p))
+                .ToList();
+
             return Ok(produseDto);
         }
 
@@ -44,14 +36,8 @@ namespace MyApi.Controllers
             if (produs == null)
                 return NotFound();
 
-            ProdusDto produsDto = new ProdusDto
-            {
-                Id = produs.Id,
-                Nume = produs.Nume,
-                Pret = produs.Pret,
-                CategorieId = produs.CategorieId,
-                NumeCategorie = produs.Categorie?.Nume
-            };
+            ProdusDto produsDto = ProdusMapper.ToDto( produs );
+
             return Ok(produsDto);
             
             
@@ -64,25 +50,10 @@ namespace MyApi.Controllers
             if(categorie == null)
                 return NotFound();
 
-            Produs produs = new Produs
-            {
-                Nume = produsCreateDto.Nume,
-                Pret = produsCreateDto.Pret,
-                CategorieId = produsCreateDto.CategorieId,
-                
-
-            };
-
-
+            Produs produs = ProdusMapper.ToEntity(produsCreateDto);
+         
             Produs produsSalvat = await produsService.AdaugaProdus(produs);
-            ProdusDto produsDto = new ProdusDto
-            {
-                Id = produsSalvat.Id,
-                Nume = produsSalvat.Nume,
-                Pret = produsSalvat.Pret,
-                CategorieId = produsSalvat.CategorieId,
-                NumeCategorie = categorie.Nume
-            };
+            ProdusDto produsDto = ProdusMapper.ToDto(produsSalvat);
 
             return CreatedAtAction(nameof(ObtineProdus), new { id = produsDto.Id },produsDto );
         }
@@ -96,27 +67,14 @@ namespace MyApi.Controllers
             if (categorie == null)
                 return NotFound();
 
-            Produs produsActualizat = new Produs
-            {
-                Nume = produsUpdateDto.Nume,
-                Pret = produsUpdateDto.Pret,
-                CategorieId = produsUpdateDto.CategorieId
-            };
+            Produs produsActualizat = ProdusMapper.ToEntity(produsUpdateDto);
             
 
             Produs? produsSalvat = await produsService.ActualizeazaProdus(id, produsActualizat);
             if( produsSalvat == null ) 
                 return NotFound();
 
-            ProdusDto produsDto = new ProdusDto
-            {
-                Id = produsSalvat.Id,
-                Nume = produsSalvat.Nume,
-                Pret = produsSalvat.Pret,
-                CategorieId = produsSalvat.CategorieId,
-                NumeCategorie = categorie.Nume
-
-            };
+            ProdusDto produsDto = ProdusMapper.ToDto(produsSalvat);
             return Ok( produsDto ); 
 
              
