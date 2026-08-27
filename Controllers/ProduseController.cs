@@ -47,8 +47,7 @@ namespace MyApi.Controllers
 
             return Ok( ProdusMapper.ToDto(result.Data!));
 
-            
-            
+
         }
 
         [HttpPost]
@@ -114,6 +113,12 @@ namespace MyApi.Controllers
             }
             return NoContent(); 
 
+        }
+
+        [HttpGet("test-eroare")]
+        public IActionResult TestEroare()
+        {
+            throw new Exception("Test middleware");
         }
     }
 }

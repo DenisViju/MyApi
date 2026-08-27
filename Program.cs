@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using MyApi.Data;
+using MyApi.Middleware;
 using MyApi.Repository;
 using MyApi.Services;
 
@@ -38,7 +39,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+//inregistrare exceptionHandlingMiddleware
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 
