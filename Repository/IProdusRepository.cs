@@ -6,9 +6,11 @@ namespace MyApi.Repository
     {
         Task<List<Produs>> ObtineToateProduseleAsync();
         Task<Produs?> ObtineProdusAsync(int id);
-        Task<Produs?> AdaugaProdusAsync(Produs produs);
+        Task<Produs> AdaugaProdusAsync(Produs produs);
         Task<Produs?> ActualizeazaProdusAsync(int id, Produs produsActualizat);
         Task<bool> StergeProdusAsync(int id);
         Task<Categorie?> GasesteCategorieAsync(int id);
+        Task<bool> ExistaProdusCuNumeleAsync(string nume);
+        Task<bool> ExistaAltProdusCuNumeleAsync(string nume, int id);
     }
 }

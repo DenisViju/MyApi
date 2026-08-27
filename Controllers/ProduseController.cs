@@ -3,6 +3,8 @@ using MyApi.Models;
 using MyApi.DTOs;
 using MyApi.Services;
 using MyApi.Mappers;
+using MyApi.Common;
+
 
 namespace MyApi.Controllers
 {
@@ -31,14 +33,20 @@ namespace MyApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ProdusDto>> ObtineProdus(int id)
         {
-            var produs = await produsService.ObtineProdusAsync(id);
+            var result = await produsService.ObtineProdusAsync(id);
 
-            if (produs == null)
-                return NotFound();
+            if(!result.Success)
+            {
+                return result.ErrorType switch
+                {
+                    ResultErrorType.NotFound => NotFound(result.Error),
+                    _ => BadRequest(result.Error)
 
-            ProdusDto produsDto = ProdusMapper.ToDto( produs );
+                };
+            }
 
-            return Ok(produsDto);
+            return Ok( ProdusMapper.ToDto(result.Data!));
+
             
             
         }
@@ -46,14 +54,25 @@ namespace MyApi.Controllers
         [HttpPost]
         public async Task<ActionResult<ProdusDto>> CreeazaProdus([FromBody] ProdusCreateDto produsCreateDto)
         {
-            Categorie? categorie = await produsService.GasesteCategorieAsync(produsCreateDto.CategorieId);
-            if(categorie == null)
-                return NotFound();
 
             Produs produs = ProdusMapper.ToEntity(produsCreateDto);
          
-            Produs produsSalvat = await produsService.AdaugaProdusAsync(produs);
-            ProdusDto produsDto = ProdusMapper.ToDto(produsSalvat);
+            Result<Produs> result = 
+                await produsService.AdaugaProdusAsync(produs);
+
+            if(!result.Success)
+            {
+                return result.ErrorType switch
+                {
+                    ResultErrorType.Conflict => Conflict(result.Error),
+                    ResultErrorType.NotFound => NotFound(result.Error),
+                    _ => BadRequest(result.Error)
+                };
+            }
+            
+            
+            ProdusDto produsDto = 
+                ProdusMapper.ToDto(result.Data!);
 
             return CreatedAtAction(nameof(ObtineProdus), new { id = produsDto.Id },produsDto );
         }
@@ -61,21 +80,22 @@ namespace MyApi.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<ProdusDto>> ActualizeazaProdus(int id, [FromBody] ProdusUpdateDto produsUpdateDto)
         {
-            Categorie? categorie =
-                await produsService.GasesteCategorieAsync(produsUpdateDto.CategorieId);
-
-            if (categorie == null)
-                return NotFound();
-
+           
             Produs produsActualizat = ProdusMapper.ToEntity(produsUpdateDto);
-            
 
-            Produs? produsSalvat = await produsService.ActualizeazaProdusAsync(id, produsActualizat);
-            if( produsSalvat == null ) 
-                return NotFound();
+            Result<Produs> result = await produsService.ActualizeazaProdusAsync(id, produsActualizat);
+            if(!result.Success)
+            {
+                return result.ErrorType switch
+                {
+                    ResultErrorType.NotFound => NotFound(result.Error),
+                    ResultErrorType.Conflict => Conflict(result.Error),
+                    _ => BadRequest(result.Error)
+                };
+            }
+               
 
-            ProdusDto produsDto = ProdusMapper.ToDto(produsSalvat);
-            return Ok( produsDto ); 
+            return Ok(ProdusMapper.ToDto(result.Data!)); 
 
              
         }
@@ -83,14 +103,16 @@ namespace MyApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> StergeProdus(int id) 
         {
-            if(await produsService.StergeProdusAsync(id))
+            Result<bool> result = await produsService.StergeProdusAsync(id);
+            if(!result.Success)
             {
-                return NoContent();
+                return result.ErrorType switch
+                {
+                    ResultErrorType.NotFound => NotFound(result.Error),
+                    _ => BadRequest(result.Error)
+                };
             }
-            else
-            {
-                return NotFound();
-            }
+            return NoContent(); 
 
         }
     }

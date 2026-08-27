@@ -1,13 +1,14 @@
 ﻿using MyApi.Models;
+using MyApi.Common;
+
 namespace MyApi.Services
 {
     public interface IProdusService
     {
         Task<List<Produs>> ObtineToateProduseleAsync();
-        Task<Produs?> ObtineProdusAsync(int id);
-        Task<Produs> AdaugaProdusAsync(Produs produs);
-        Task<Produs?> ActualizeazaProdusAsync(int id, Produs produsActualizat);
-        Task<bool> StergeProdusAsync(int id);
-        Task<Categorie?> GasesteCategorieAsync(int id);
+        Task<Result<Produs>> ObtineProdusAsync(int id);
+        Task<Result<Produs>> AdaugaProdusAsync(Produs produs);
+        Task<Result<Produs>> ActualizeazaProdusAsync(int id, Produs produsActualizat);
+        Task<Result<bool>> StergeProdusAsync(int id);
     }
 }

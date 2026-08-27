@@ -74,5 +74,16 @@ namespace MyApi.Repository
                 .FirstOrDefaultAsync(c => c.Id == id);   
         }
 
+        public async Task<bool> ExistaProdusCuNumeleAsync(string nume)
+        {
+            return await context.Produse
+                .AnyAsync(p => p.Nume == nume); 
+        }
+        public async Task<bool> ExistaAltProdusCuNumeleAsync(string nume, int id)
+        {
+            return await context.Produse
+                .AnyAsync(p => p.Nume == nume && p.Id != id);
+        }
+
     }
 }
