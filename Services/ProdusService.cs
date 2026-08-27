@@ -1,71 +1,43 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MyApi.Data;
-using MyApi.Models;
+﻿using MyApi.Models;
+using MyApi.Repository;
 namespace MyApi.Services
 {
     public class ProdusService : IProdusService
     {
-        private readonly AplicatieDbContext context;
-        public ProdusService(AplicatieDbContext context)
+        private readonly IProdusRepository repository;
+        public ProdusService(IProdusRepository repository)
         {
-            this.context = context;
+            this.repository = repository;
         }
 
-        public async Task<List<Produs>> ObtineToateProdusele()
+        public async Task<List<Produs>> ObtineToateProduseleAsync()
         {
-           return await context.Produse
-                .Include(p => p.Categorie)
-                .ToListAsync(); 
+           return await repository.ObtineToateProduseleAsync();
         }
-        public async Task<Produs?> ObtineProdus(int id)
+        public async Task<Produs?> ObtineProdusAsync(int id)
         {
-            return await context.Produse
-                .Include(p => p.Categorie)
-                .FirstOrDefaultAsync(x => x.Id == id);
+            return await repository.ObtineProdusAsync(id);
                 
         }
 
-        public async Task<Produs> AdaugaProdus(Produs produs)
+        public async Task<Produs> AdaugaProdusAsync(Produs produs)
         {
-            await context.Produse.AddAsync(produs);
-            await context.SaveChangesAsync();
-
-            return produs;
+            return await repository.AdaugaProdusAsync(produs);
         }
 
-        public async Task<Produs?> ActualizeazaProdus(int id, Produs produsActualizat) 
+        public async Task<Produs?> ActualizeazaProdusAsync(int id, Produs produsActualizat) 
         {
-            Produs? produs = await context.Produse
-                .Include(p => p.Categorie)
-                .FirstOrDefaultAsync(p => p.Id == id);
-            if (produs == null)
-            {
-                return null;
-            }
-            produs.Nume = produsActualizat.Nume;
-            produs.Pret = produsActualizat.Pret;
-            await context.SaveChangesAsync();
-
-            return produs;
+            return await repository.ActualizeazaProdusAsync(id, produsActualizat);
         }
 
-        public async Task<bool> StergeProdus(int id)
+        public async Task<bool> StergeProdusAsync(int id)
         {
-            Produs? produs = await context.Produse.FirstOrDefaultAsync(p =>p.Id == id);
-            if(produs == null)
-            {
-                return false;
-            }
-            context.Produse.Remove(produs);
-            await context.SaveChangesAsync();
-
-            return true;
+            return await repository.StergeProdusAsync(id);
 
         }
-        public async Task<Categorie?> GasesteCategorie(int id)
+        public async Task<Categorie?> GasesteCategorieAsync(int id)
         {
-            return await context.Categorii
-                .FirstOrDefaultAsync(c => c.Id == id);
+           return await repository.GasesteCategorieAsync(id);
 
         }
     }

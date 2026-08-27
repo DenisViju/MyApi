@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using MyApi.Data;
+using MyApi.Repository;
 using MyApi.Services;
 
 
@@ -9,7 +10,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddScoped<IMesajService, MesajService>();  
 builder.Services.AddScoped<IProdusService, ProdusService>();
+
 builder.Services.AddControllers();
+
+//Add repositories to the container
+builder.Services.AddScoped<IProdusRepository, ProdusRepository>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

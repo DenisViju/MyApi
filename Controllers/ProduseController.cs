@@ -17,9 +17,9 @@ namespace MyApi.Controllers
         }
 
         [HttpGet]
-        public async  Task<IActionResult> ObtineProduse()
+        public async Task<ActionResult<List<ProdusDto>>> ObtineProduse()
         {
-            var produse = await produsService.ObtineToateProdusele();
+            var produse = await produsService.ObtineToateProduseleAsync();
             
             List<ProdusDto> produseDto = produse
                 .Select(p => ProdusMapper.ToDto(p))
@@ -29,9 +29,9 @@ namespace MyApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> ObtineProdus(int id)
+        public async Task<ActionResult<ProdusDto>> ObtineProdus(int id)
         {
-            var produs = await produsService.ObtineProdus(id);
+            var produs = await produsService.ObtineProdusAsync(id);
 
             if (produs == null)
                 return NotFound();
@@ -44,25 +44,25 @@ namespace MyApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreeazaProdus([FromBody] ProdusCreateDto produsCreateDto)
+        public async Task<ActionResult<ProdusDto>> CreeazaProdus([FromBody] ProdusCreateDto produsCreateDto)
         {
-            Categorie? categorie = await produsService.GasesteCategorie(produsCreateDto.CategorieId);
+            Categorie? categorie = await produsService.GasesteCategorieAsync(produsCreateDto.CategorieId);
             if(categorie == null)
                 return NotFound();
 
             Produs produs = ProdusMapper.ToEntity(produsCreateDto);
          
-            Produs produsSalvat = await produsService.AdaugaProdus(produs);
+            Produs produsSalvat = await produsService.AdaugaProdusAsync(produs);
             ProdusDto produsDto = ProdusMapper.ToDto(produsSalvat);
 
             return CreatedAtAction(nameof(ObtineProdus), new { id = produsDto.Id },produsDto );
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> ActualizeazaProdus(int id, [FromBody] ProdusUpdateDto produsUpdateDto)
+        public async Task<ActionResult<ProdusDto>> ActualizeazaProdus(int id, [FromBody] ProdusUpdateDto produsUpdateDto)
         {
             Categorie? categorie =
-                await produsService.GasesteCategorie(produsUpdateDto.CategorieId);
+                await produsService.GasesteCategorieAsync(produsUpdateDto.CategorieId);
 
             if (categorie == null)
                 return NotFound();
@@ -70,7 +70,7 @@ namespace MyApi.Controllers
             Produs produsActualizat = ProdusMapper.ToEntity(produsUpdateDto);
             
 
-            Produs? produsSalvat = await produsService.ActualizeazaProdus(id, produsActualizat);
+            Produs? produsSalvat = await produsService.ActualizeazaProdusAsync(id, produsActualizat);
             if( produsSalvat == null ) 
                 return NotFound();
 
@@ -83,7 +83,7 @@ namespace MyApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> StergeProdus(int id) 
         {
-            if(await produsService.StergeProdus(id))
+            if(await produsService.StergeProdusAsync(id))
             {
                 return NoContent();
             }
