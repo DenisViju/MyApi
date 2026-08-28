@@ -1,15 +1,23 @@
-﻿using System.Net;
-using System.Text.Json;
+﻿using Microsoft.AspNetCore.Mvc;
+
+
 
 namespace MyApi.Middleware
 {
     public class ExceptionHandlingMiddleware
     {
         private readonly RequestDelegate next;
+        private readonly ILogger<ExceptionHandlingMiddleware> logger;
+        private readonly IProblemDetailsService problemDetailsService;
 
-        public ExceptionHandlingMiddleware(RequestDelegate next)
+        public ExceptionHandlingMiddleware
+            (RequestDelegate next,
+            ILogger<ExceptionHandlingMiddleware> logger,
+            IProblemDetailsService problemDetailsService)
         {
             this.next = next;
+            this.logger = logger;
+            this.problemDetailsService = problemDetailsService;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -20,22 +28,28 @@ namespace MyApi.Middleware
             }
             catch (Exception ex)
             {
-                await HandleExceptionAsync(context, ex);
+                logger.LogError(ex, "A aparut o eroare");
+                await HandleExceptionAsync(context);
             }
         }
-        public static async Task HandleExceptionAsync(HttpContext context, Exception ex)
+        public async Task HandleExceptionAsync(HttpContext context)
         {
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-
-            context.Response.ContentType = "application/json";
-
-            var response = new {
-                mesaj = "A aparut o eroare interna",
-                detalii = ex.Message
+            
+            var problemDetails = new ProblemDetails
+            {
+                Status = 500,
+                Title = "A aparut o eroare interna."
+            };
+            ProblemDetailsContext problemDetailsContext = new ProblemDetailsContext 
+            { 
+                HttpContext = context,
+                ProblemDetails = problemDetails,
             };
 
-            await context.Response.WriteAsync(
-                JsonSerializer.Serialize(response));
+            await problemDetailsService.WriteAsync(problemDetailsContext);
+
+            
+
         }
 
     }

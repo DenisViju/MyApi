@@ -13,6 +13,7 @@ builder.Services.AddScoped<IMesajService, MesajService>();
 builder.Services.AddScoped<IProdusService, ProdusService>();
 
 builder.Services.AddControllers();
+builder.Services.AddProblemDetails();
 
 //Add repositories to the container
 builder.Services.AddScoped<IProdusRepository, ProdusRepository>();
