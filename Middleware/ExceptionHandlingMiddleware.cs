@@ -37,9 +37,13 @@ namespace MyApi.Middleware
             
             var problemDetails = new ProblemDetails
             {
+                Type = "https://httpstatuses.com/500",
+                Title = "A aparut o eroare interna.",
                 Status = 500,
-                Title = "A aparut o eroare interna."
+                Instance = context.Request.Path
             };
+            problemDetails.Extensions["traceId"] = context.TraceIdentifier;
+
             ProblemDetailsContext problemDetailsContext = new ProblemDetailsContext 
             { 
                 HttpContext = context,

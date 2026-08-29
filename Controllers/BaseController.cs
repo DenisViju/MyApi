@@ -5,15 +5,29 @@ namespace MyApi.Controllers
 {
     public class BaseController : ControllerBase
     {
+        private ProblemDetails CreateProblemDetails(int status, string? error)
+        {
+            ProblemDetails problemDetails = new ProblemDetails 
+            {
+                Type = $"https://httpstatuses.com/{status}",
+                Title = error,
+                Status = status,
+                Instance = HttpContext.Request.Path
+            };
+            problemDetails.Extensions["traceId"] = HttpContext.TraceIdentifier;
+
+            return problemDetails;
+        }
+
+
         protected ActionResult HandleError(ResultErrorType errorType, string? error)
         {
+
             return errorType switch
             {
-                ResultErrorType.Conflict => Conflict
-                    (new ProblemDetails {Status = 409, Title = error }),
-                ResultErrorType.NotFound => NotFound
-                    (new ProblemDetails { Status = 404, Title = error }),
-                _ => BadRequest(new ProblemDetails { Status = 404, Title = error })
+                ResultErrorType.Conflict => Conflict(CreateProblemDetails(408, error)),
+                ResultErrorType.NotFound => NotFound(CreateProblemDetails(404, error)),
+                _ => BadRequest(CreateProblemDetails(400, error))
             };
 
             
