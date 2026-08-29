@@ -1,10 +1,11 @@
-﻿using MyApi.Models;
+﻿using MyApi.DTOs;
+using MyApi.Models;
 
 namespace MyApi.Repository
 {
     public interface IProdusRepository
     {
-        Task<List<Produs>> ObtineToateProduseleAsync(CancellationToken cancellationToken);
+        Task<List<Produs>> ObtineToateProduseleAsync(ProdusFiltruDto filtru, CancellationToken cancellationToken);
         Task<Produs?> ObtineProdusAsync(int id, CancellationToken cancellationToken);
         Task<Produs> AdaugaProdusAsync(Produs produs, CancellationToken cancellationToken);
         Task<Produs?> ActualizeazaProdusAsync(int id, Produs produsActualizat, CancellationToken cancellationToken);

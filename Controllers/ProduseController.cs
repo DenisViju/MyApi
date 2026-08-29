@@ -19,9 +19,9 @@ namespace MyApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ProdusDto>>> ObtineProduse(CancellationToken cancellationToken)
+        public async Task<ActionResult<List<ProdusDto>>> ObtineProduse(ProdusFiltruDto filtru, CancellationToken cancellationToken)
         {
-            var produse = await produsService.ObtineToateProduseleAsync(cancellationToken);
+            var produse = await produsService.ObtineToateProduseleAsync(filtru, cancellationToken);
             
             List<ProdusDto> produseDto = produse
                 .Select(p => ProdusMapper.ToDto(p))

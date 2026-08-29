@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyApi.Data;
 using MyApi.Models;
+using MyApi.DTOs;
 
 namespace MyApi.Repository
 {
@@ -12,11 +13,32 @@ namespace MyApi.Repository
             this.context = context;
         }
 
-        public async Task<List<Produs>> ObtineToateProduseleAsync(CancellationToken cancellationToken)
+        public async Task<List<Produs>> ObtineToateProduseleAsync
+            (ProdusFiltruDto filtru, CancellationToken cancellationToken)
         {
-            return await context.Produse
+            IQueryable<Produs> query = context.Produse
                 .AsNoTracking()
-                .Include(p => p.Categorie)
+                .Include(p => p.Categorie);
+
+            if(filtru.CategorieId.HasValue)
+            {
+                query = query.Where(p => p.CategorieId == filtru.CategorieId.Value);
+            }
+
+            if(filtru.PretMinim.HasValue)
+            {
+                query = query.Where(p => p.Pret >= filtru.PretMinim.Value);
+            }
+            if (filtru.PretMaxim.HasValue)
+            {
+                query = query.Where(p => p.Pret <= filtru.PretMaxim.Value);
+            }
+            if(!string.IsNullOrWhiteSpace(filtru.Nume))
+            {
+                query = query.Where(p => p.Nume!.Contains(filtru.Nume));
+            } 
+
+            return await query
                 .ToListAsync(cancellationToken);
         }
 

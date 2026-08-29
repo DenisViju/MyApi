@@ -1,6 +1,7 @@
 ﻿using MyApi.Common;
 using MyApi.Models;
 using MyApi.Repository;
+using MyApi.DTOs;
 
 namespace MyApi.Services
 {
@@ -12,9 +13,9 @@ namespace MyApi.Services
             this.repository = repository;
         }
 
-        public async Task<List<Produs>> ObtineToateProduseleAsync(CancellationToken cancellationToken)
+        public async Task<List<Produs>> ObtineToateProduseleAsync(ProdusFiltruDto filtru, CancellationToken cancellationToken)
         {
-           return await repository.ObtineToateProduseleAsync(cancellationToken);
+           return await repository.ObtineToateProduseleAsync(filtru, cancellationToken);
         }
         public async Task<Result<Produs>> ObtineProdusAsync(int id, CancellationToken cancellationToken)
         {
