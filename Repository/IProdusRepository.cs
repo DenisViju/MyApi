@@ -4,13 +4,13 @@ namespace MyApi.Repository
 {
     public interface IProdusRepository
     {
-        Task<List<Produs>> ObtineToateProduseleAsync();
-        Task<Produs?> ObtineProdusAsync(int id);
-        Task<Produs> AdaugaProdusAsync(Produs produs);
-        Task<Produs?> ActualizeazaProdusAsync(int id, Produs produsActualizat);
-        Task<bool> StergeProdusAsync(int id);
-        Task<Categorie?> GasesteCategorieAsync(int id);
-        Task<bool> ExistaProdusCuNumeleAsync(string nume);
-        Task<bool> ExistaAltProdusCuNumeleAsync(string nume, int id);
+        Task<List<Produs>> ObtineToateProduseleAsync(CancellationToken cancellationToken);
+        Task<Produs?> ObtineProdusAsync(int id, CancellationToken cancellationToken);
+        Task<Produs> AdaugaProdusAsync(Produs produs, CancellationToken cancellationToken);
+        Task<Produs?> ActualizeazaProdusAsync(int id, Produs produsActualizat, CancellationToken cancellationToken);
+        Task<bool> StergeProdusAsync(int id, CancellationToken cancellationToken);
+        Task<Categorie?> GasesteCategorieAsync(int id, CancellationToken cancellationToken);
+        Task<bool> ExistaProdusCuNumeleAsync(string nume, CancellationToken cancellationToken);
+        Task<bool> ExistaAltProdusCuNumeleAsync(string nume, int id, CancellationToken cancellationToken);
     }
 }

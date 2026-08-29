@@ -19,9 +19,9 @@ namespace MyApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ProdusDto>>> ObtineProduse()
+        public async Task<ActionResult<List<ProdusDto>>> ObtineProduse(CancellationToken cancellationToken)
         {
-            var produse = await produsService.ObtineToateProduseleAsync();
+            var produse = await produsService.ObtineToateProduseleAsync(cancellationToken);
             
             List<ProdusDto> produseDto = produse
                 .Select(p => ProdusMapper.ToDto(p))
@@ -31,9 +31,9 @@ namespace MyApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ProdusDto>> ObtineProdus(int id)
+        public async Task<ActionResult<ProdusDto>> ObtineProdus(int id, CancellationToken cancellationToken)
         {
-            var result = await produsService.ObtineProdusAsync(id);
+            var result = await produsService.ObtineProdusAsync(id, cancellationToken);
 
             if(!result.Success)
             {
@@ -46,13 +46,14 @@ namespace MyApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ProdusDto>> CreeazaProdus([FromBody] ProdusCreateDto produsCreateDto)
+        public async Task<ActionResult<ProdusDto>> CreeazaProdus
+            ([FromBody] ProdusCreateDto produsCreateDto, CancellationToken cancellationToken)
         {
 
             Produs produs = ProdusMapper.ToEntity(produsCreateDto);
          
             Result<Produs> result = 
-                await produsService.AdaugaProdusAsync(produs);
+                await produsService.AdaugaProdusAsync(produs, cancellationToken);
 
             if(!result.Success)
             {
@@ -67,12 +68,13 @@ namespace MyApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<ProdusDto>> ActualizeazaProdus(int id, [FromBody] ProdusUpdateDto produsUpdateDto)
+        public async Task<ActionResult<ProdusDto>> ActualizeazaProdus
+            (int id, [FromBody] ProdusUpdateDto produsUpdateDto, CancellationToken cancellationToken)
         {
            
             Produs produsActualizat = ProdusMapper.ToEntity(produsUpdateDto);
 
-            Result<Produs> result = await produsService.ActualizeazaProdusAsync(id, produsActualizat);
+            Result<Produs> result = await produsService.ActualizeazaProdusAsync(id, produsActualizat,cancellationToken);
             if(!result.Success)
             {
                 return HandleError(result.ErrorType, result.Error);
@@ -85,9 +87,9 @@ namespace MyApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> StergeProdus(int id) 
+        public async Task<IActionResult> StergeProdus(int id, CancellationToken cancellationToken) 
         {
-            Result<bool> result = await produsService.StergeProdusAsync(id);
+            Result<bool> result = await produsService.StergeProdusAsync(id, cancellationToken);
             if(!result.Success)
             {
                 return HandleError(result.ErrorType, result.Error);

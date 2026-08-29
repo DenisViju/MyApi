@@ -7,7 +7,7 @@ namespace MyApi.Controllers
     {
         private ProblemDetails CreateProblemDetails(int status, string? error)
         {
-            ProblemDetails problemDetails = new ProblemDetails 
+            var problemDetails = new ProblemDetails 
             {
                 Type = $"https://httpstatuses.com/{status}",
                 Title = error,
@@ -25,7 +25,7 @@ namespace MyApi.Controllers
 
             return errorType switch
             {
-                ResultErrorType.Conflict => Conflict(CreateProblemDetails(408, error)),
+                ResultErrorType.Conflict => Conflict(CreateProblemDetails(409, error)),
                 ResultErrorType.NotFound => NotFound(CreateProblemDetails(404, error)),
                 _ => BadRequest(CreateProblemDetails(400, error))
             };

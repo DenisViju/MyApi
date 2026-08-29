@@ -1,5 +1,4 @@
 ﻿using MyApi.Common;
-using MyApi.DTOs;
 using MyApi.Models;
 using MyApi.Repository;
 
@@ -13,13 +12,13 @@ namespace MyApi.Services
             this.repository = repository;
         }
 
-        public async Task<List<Produs>> ObtineToateProduseleAsync()
+        public async Task<List<Produs>> ObtineToateProduseleAsync(CancellationToken cancellationToken)
         {
-           return await repository.ObtineToateProduseleAsync();
+           return await repository.ObtineToateProduseleAsync(cancellationToken);
         }
-        public async Task<Result<Produs>> ObtineProdusAsync(int id)
+        public async Task<Result<Produs>> ObtineProdusAsync(int id, CancellationToken cancellationToken)
         {
-            var produs = await repository.ObtineProdusAsync(id);
+            var produs = await repository.ObtineProdusAsync(id, cancellationToken);
 
             if (produs == null)
             {
@@ -32,9 +31,9 @@ namespace MyApi.Services
                 
         }
 
-        public async Task<Result<Produs>> AdaugaProdusAsync(Produs produs)
+        public async Task<Result<Produs>> AdaugaProdusAsync(Produs produs, CancellationToken cancellationToken)
         {
-            Categorie? categorie = await repository.GasesteCategorieAsync(produs.CategorieId);
+            Categorie? categorie = await repository.GasesteCategorieAsync(produs.CategorieId, cancellationToken);
             if (categorie == null)
             {
                 return Result<Produs>.Fail(
@@ -42,7 +41,7 @@ namespace MyApi.Services
                     ResultErrorType.NotFound);
             }
                 
-            bool exista = await repository.ExistaProdusCuNumeleAsync(produs.Nume!);
+            bool exista = await repository.ExistaProdusCuNumeleAsync(produs.Nume!, cancellationToken);
             if (exista)
             {
                 return Result<Produs>.Fail(
@@ -50,16 +49,17 @@ namespace MyApi.Services
                     ResultErrorType.Conflict);
             }
 
-            Produs produsSalvat = await repository.AdaugaProdusAsync(produs);
+            Produs produsSalvat = await repository.AdaugaProdusAsync(produs, cancellationToken);
 
             return Result<Produs>.Ok(produsSalvat);
         }
 
-        public async Task<Result<Produs>> ActualizeazaProdusAsync(int id, Produs produsActualizat) 
+        public async Task<Result<Produs>> ActualizeazaProdusAsync
+            (int id, Produs produsActualizat, CancellationToken cancellationToken) 
         {
              
 
-            Produs? produs = await repository.ObtineProdusAsync(id);
+            Produs? produs = await repository.ObtineProdusAsync(id, cancellationToken);
             if (produs == null)
             {
                 return Result<Produs>.Fail(
@@ -68,7 +68,7 @@ namespace MyApi.Services
             }
 
             Categorie? categorie =
-                await repository.GasesteCategorieAsync(produsActualizat.CategorieId);
+                await repository.GasesteCategorieAsync(produsActualizat.CategorieId, cancellationToken);
 
             if (categorie == null)
             {
@@ -77,7 +77,7 @@ namespace MyApi.Services
                    ResultErrorType.NotFound);
             }
 
-            bool exista = await repository.ExistaAltProdusCuNumeleAsync(produsActualizat.Nume!, id);
+            bool exista = await repository.ExistaAltProdusCuNumeleAsync(produsActualizat.Nume!, id, cancellationToken);
             if (exista)
             {
                 return Result<Produs>.Fail(
@@ -87,7 +87,7 @@ namespace MyApi.Services
             }
 
 
-            Produs? produsSalvat = await repository.ActualizeazaProdusAsync(id, produsActualizat);
+            Produs? produsSalvat = await repository.ActualizeazaProdusAsync(id, produsActualizat, cancellationToken);
             if (produsSalvat == null)
             {
                 return Result<Produs>.Fail(
@@ -99,16 +99,16 @@ namespace MyApi.Services
             return Result<Produs>.Ok(produsSalvat);
         }
 
-        public async Task<Result<bool>> StergeProdusAsync(int id)
+        public async Task<Result<bool>> StergeProdusAsync(int id, CancellationToken cancellationToken)
         {
-            Produs? produs = await repository.ObtineProdusAsync(id);
+            Produs? produs = await repository.ObtineProdusAsync(id, cancellationToken);
             if (produs == null)
             {
                 return Result<bool>.Fail(
                     "Produsul nu exista",
                     ResultErrorType.NotFound);
             }
-            bool sters = await repository.StergeProdusAsync(id);
+            bool sters = await repository.StergeProdusAsync(id, cancellationToken);
             
             return Result<bool>.Ok(sters);  
 

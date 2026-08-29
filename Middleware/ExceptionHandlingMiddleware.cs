@@ -44,7 +44,7 @@ namespace MyApi.Middleware
             };
             problemDetails.Extensions["traceId"] = context.TraceIdentifier;
 
-            ProblemDetailsContext problemDetailsContext = new ProblemDetailsContext 
+            var problemDetailsContext = new ProblemDetailsContext 
             { 
                 HttpContext = context,
                 ProblemDetails = problemDetails,
