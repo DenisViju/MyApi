@@ -10,7 +10,7 @@ namespace MyApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ProduseController : ControllerBase
+    public class ProduseController : BaseController
     {
         private readonly IProdusService produsService;
         public ProduseController(IProdusService produsService)
@@ -37,12 +37,7 @@ namespace MyApi.Controllers
 
             if(!result.Success)
             {
-                return result.ErrorType switch
-                {
-                    ResultErrorType.NotFound => NotFound(result.Error),
-                    _ => BadRequest(result.Error)
-
-                };
+                return HandleError(result.ErrorType, result.Error);
             }
 
             return Ok( ProdusMapper.ToDto(result.Data!));
@@ -61,12 +56,7 @@ namespace MyApi.Controllers
 
             if(!result.Success)
             {
-                return result.ErrorType switch
-                {
-                    ResultErrorType.Conflict => Conflict(result.Error),
-                    ResultErrorType.NotFound => NotFound(result.Error),
-                    _ => BadRequest(result.Error)
-                };
+                return HandleError(result.ErrorType, result.Error);
             }
             
             
@@ -85,12 +75,7 @@ namespace MyApi.Controllers
             Result<Produs> result = await produsService.ActualizeazaProdusAsync(id, produsActualizat);
             if(!result.Success)
             {
-                return result.ErrorType switch
-                {
-                    ResultErrorType.NotFound => NotFound(result.Error),
-                    ResultErrorType.Conflict => Conflict(result.Error),
-                    _ => BadRequest(result.Error)
-                };
+                return HandleError(result.ErrorType, result.Error);
             }
                
 
@@ -105,11 +90,7 @@ namespace MyApi.Controllers
             Result<bool> result = await produsService.StergeProdusAsync(id);
             if(!result.Success)
             {
-                return result.ErrorType switch
-                {
-                    ResultErrorType.NotFound => NotFound(result.Error),
-                    _ => BadRequest(result.Error)
-                };
+                return HandleError(result.ErrorType, result.Error);
             }
             return NoContent(); 
 
