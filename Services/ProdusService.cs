@@ -13,28 +13,28 @@ namespace MyApi.Services
             this.repository = repository;
         }
 
-        public async Task<Result<PagedResult<Produs>>> ObtineToateProduseleAsync(
+        public async Task<Result<PagedResult<ProdusDto>>> ObtineToateProduseleAsync(
             ProdusFiltruDto filtru, int page, int pageSize, CancellationToken cancellationToken)
         {
             if (page < 1)
             {
-                return Result<PagedResult<Produs>>.Fail(
+                return Result<PagedResult<ProdusDto>>.Fail(
                     "Pagina trebuie sa fie cel putin 1.",
                     ResultErrorType.BadRequest);
             }
 
             if (pageSize < 1 || pageSize > 100)
             {
-                return Result<PagedResult<Produs>>.Fail(
+                return Result<PagedResult<ProdusDto>>.Fail(
                     "pageSize trebuie sa fie intre 1 și 100.",
                     ResultErrorType.BadRequest
                     );
                     
             }
-            PagedResult<Produs> result = await repository
+            PagedResult<ProdusDto> result = await repository
                 .ObtineToateProduseleAsync(filtru, page, pageSize, cancellationToken);
 
-            return Result<PagedResult<Produs>>.Ok(result);
+            return Result<PagedResult<ProdusDto>>.Ok(result);
         }
         public async Task<Result<Produs>> ObtineProdusAsync(int id, CancellationToken cancellationToken)
         {

@@ -14,17 +14,24 @@ namespace MyApi.Repository
             this.context = context;
         }
 
-        public async Task<PagedResult<Produs>> ObtineToateProduseleAsync
+        public async Task<PagedResult<ProdusDto>> ObtineToateProduseleAsync
             (ProdusFiltruDto filtru,
             int page,
             int pageSize,
             CancellationToken cancellationToken)
         {
-            IQueryable<Produs> query = context.Produse
+            IQueryable<ProdusDto> query = context.Produse
                 .AsNoTracking()
-                .Include(p => p.Categorie);
+                .Select(p => new ProdusDto
+                {
+                    Id = p.Id,
+                    Nume = p.Nume,
+                    Pret = p.Pret,
+                    CategorieId = p.CategorieId,
+                    NumeCategorie = p.Categorie!.Nume
+                });
 
-            if(filtru.CategorieId.HasValue)
+            if (filtru.CategorieId.HasValue)
             {
                 query = query.Where(p => p.CategorieId == filtru.CategorieId.Value);
             }
@@ -42,20 +49,36 @@ namespace MyApi.Repository
                 query = query.Where(p => p.Nume!.Contains(filtru.Nume));
             }
 
-            int totalCount = await query.CountAsync(cancellationToken);
+            if(filtru.SortBy == "pret")
+            {
+                query = filtru.Descending
+                    ? query.OrderByDescending(p => p.Pret) 
+                    : query.OrderBy(p => p.Pret);
+            }
+            else if( filtru.SortBy == "nume")
+            {
+                query = filtru.Descending
+                    ? query.OrderByDescending(p => p.Nume)
+                    : query.OrderBy(p => p.Nume);
+            }
+            else
+            {
+                query = query.OrderBy(p => p.Id);
+            }
+
+                int totalCount = await query.CountAsync(cancellationToken);
             int totalPages = (int)Math.Ceiling(
                 totalCount / (double)pageSize);
 
             int skip = (page - 1) * pageSize;
-            List<Produs> produse = await query
-                .OrderBy(p => p.Id)
+            List<ProdusDto> produseDto = await query
                 .Skip(skip)
                 .Take(pageSize)
                 .ToListAsync(cancellationToken);
 
-            return new PagedResult<Produs>
+            return new PagedResult<ProdusDto>
             {
-                Data = produse,
+                Data = produseDto,
                 Page = page,
                 PageSize = pageSize,
                 TotalCount = totalCount,

@@ -6,7 +6,7 @@ namespace MyApi.Repository
 {
     public interface IProdusRepository
     {
-        Task<PagedResult<Produs>> ObtineToateProduseleAsync
+        Task<PagedResult<ProdusDto>> ObtineToateProduseleAsync
             (ProdusFiltruDto filtru, int page, int pageSize, CancellationToken cancellationToken);
         Task<Produs?> ObtineProdusAsync(int id, CancellationToken cancellationToken);
         Task<Produs> AdaugaProdusAsync(Produs produs, CancellationToken cancellationToken);

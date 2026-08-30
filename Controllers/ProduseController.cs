@@ -32,19 +32,8 @@ namespace MyApi.Controllers
                 return HandleError(result.ErrorType, result.Error);
             }
 
-            PagedResult<Produs> pagedResult = result.Data!;
+            PagedResult<ProdusDto> pagedResultDto = result.Data!;
 
-            PagedResult<ProdusDto> pagedResultDto = new PagedResult<ProdusDto>
-            {
-                Data = pagedResult.Data
-                    .Select(p => ProdusMapper.ToDto(p))
-                    .ToList(),
-
-                Page = pagedResult.Page,
-                PageSize = pagedResult.PageSize,
-                TotalCount = pagedResult.TotalCount,
-                TotalPages = pagedResult.TotalPages
-            };
 
             return Ok(pagedResultDto);
 
