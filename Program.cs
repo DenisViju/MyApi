@@ -27,9 +27,10 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
     });
 
-//inregistrare AplicatieDbContext cu SQLite
+//inregistrare AplicatieDbContext cu SQLServer
 builder.Services.AddDbContext<AplicatieDbContext>(options =>
-    options.UseSqlite("Data Source=produse.db"));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 

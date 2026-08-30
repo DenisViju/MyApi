@@ -1,7 +1,8 @@
-﻿using MyApi.Common;
+﻿using Microsoft.EntityFrameworkCore;
+using MyApi.Common;
+using MyApi.DTOs;
 using MyApi.Models;
 using MyApi.Repository;
-using MyApi.DTOs;
 
 namespace MyApi.Services
 {
@@ -107,13 +108,26 @@ namespace MyApi.Services
             }
 
 
-            Produs? produsSalvat = await repository.ActualizeazaProdusAsync(id, produsActualizat, cancellationToken);
+            Produs? produsSalvat = new Produs();
+            try
+            {
+                produsSalvat = await repository.ActualizeazaProdusAsync(id, produsActualizat, cancellationToken);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return Result<Produs>.Fail(
+                    "Produsul a fost modificat sau sters de un alt utilizator intre timp. " +
+                    "Va rugam sa reincarcati pagina si sa incercati din nou.",
+                    ResultErrorType.Conflict);
+            }
             if (produsSalvat == null)
             {
                 return Result<Produs>.Fail(
                     "Produsul nu a putut fi actualizat.",
                     ResultErrorType.NotFound);
             }
+
+
 
 
             return Result<Produs>.Ok(produsSalvat);

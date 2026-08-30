@@ -7,6 +7,7 @@
         public double Pret { get; set; }
         public int CategorieId {  get; set; }
         public string? NumeCategorie { get; set; }
+
         public byte[] RowVersion { get; set; } = [];
     }
 }

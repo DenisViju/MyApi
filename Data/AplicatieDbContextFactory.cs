@@ -8,7 +8,11 @@ namespace MyApi.Data
         public AplicatieDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<AplicatieDbContext>();
-            optionsBuilder.UseSqlite("Data Source=produse.db");
+            optionsBuilder.UseSqlServer(
+            "Server=(localdb)\\MSSQLLocalDB;" +
+            "Database=MyApiDb;" +
+            "Trusted_Connection=True;" +
+            "TrustServerCertificate=True");
 
             return new AplicatieDbContext(optionsBuilder.Options);
         }

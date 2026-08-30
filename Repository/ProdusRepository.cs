@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MyApi.Data;
-using MyApi.Models;
-using MyApi.DTOs;
 using MyApi.Common;
+using MyApi.Data;
+using MyApi.DTOs;
+using MyApi.Models;
+using System.Linq;
 
 namespace MyApi.Repository
 {
@@ -111,6 +112,10 @@ namespace MyApi.Repository
 
             if (produs == null)
                 return null;
+            
+            context.Entry(produs)
+                .Property(p => p.RowVersion)
+                .OriginalValue = produsActualizat.RowVersion;
 
             produs.Nume = produsActualizat.Nume;
             produs.Pret = produsActualizat.Pret;
