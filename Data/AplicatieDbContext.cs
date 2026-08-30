@@ -13,6 +13,7 @@ namespace MyApi.Data
 
         public DbSet<Produs> Produse { get; set; }
         public DbSet<Categorie> Categorii { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -36,6 +37,32 @@ namespace MyApi.Data
             modelBuilder.Entity<Produs>()
                 .Property(p => p.RowVersion)
                 .IsRowVersion();
+
+
+
+            modelBuilder.Entity<User>()
+                .HasKey(u => u.Id);
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.Username)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Username)
+                .IsUnique();
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.PasswordHash)
+                .IsRequired();
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.Role)
+                .IsRequired()
+                .HasMaxLength(20);
+
+
+
         }
     }
 

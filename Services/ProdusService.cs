@@ -3,6 +3,7 @@ using MyApi.Common;
 using MyApi.DTOs;
 using MyApi.Models;
 using MyApi.Repository;
+using MyApi.Services.Interfaces;
 
 namespace MyApi.Services
 {

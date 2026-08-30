@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyApi.Models;
 using MyApi.DTOs;
-using MyApi.Services;
 using MyApi.Mappers;
 using MyApi.Common;
+using MyApi.Services;
 
 
 namespace MyApi.Controllers

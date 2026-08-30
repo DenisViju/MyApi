@@ -10,12 +10,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container. 
 builder.Services.AddScoped<IProdusService, ProdusService>();
+builder.Services.AddScoped<IPasswordService, PasswordService>();
 
 builder.Services.AddControllers();
 builder.Services.AddProblemDetails();
 
 //Add repositories to the container
 builder.Services.AddScoped<IProdusRepository, ProdusRepository>();
+
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

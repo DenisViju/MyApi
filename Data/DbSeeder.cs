@@ -59,7 +59,7 @@ namespace MyApi.Data
                 // Sport
                 new Produs { Nume = "Minge fotbal", Pret = 75, CategorieId = categorii[5].Id },
                 new Produs { Nume = "Saltea yoga", Pret = 130, CategorieId = categorii[5].Id },
-                new Produs { Nume = "Ganere reglabile", Pret = 300, CategorieId = categorii[5].Id }
+                new Produs { Nume = "Gantere reglabile", Pret = 300, CategorieId = categorii[5].Id }
             };
 
             await context.Produse.AddRangeAsync(produse);
