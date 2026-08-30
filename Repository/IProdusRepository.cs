@@ -1,11 +1,13 @@
 ﻿using MyApi.DTOs;
 using MyApi.Models;
+using MyApi.Common;
 
 namespace MyApi.Repository
 {
     public interface IProdusRepository
     {
-        Task<List<Produs>> ObtineToateProduseleAsync(ProdusFiltruDto filtru, CancellationToken cancellationToken);
+        Task<PagedResult<Produs>> ObtineToateProduseleAsync
+            (ProdusFiltruDto filtru, int page, int pageSize, CancellationToken cancellationToken);
         Task<Produs?> ObtineProdusAsync(int id, CancellationToken cancellationToken);
         Task<Produs> AdaugaProdusAsync(Produs produs, CancellationToken cancellationToken);
         Task<Produs?> ActualizeazaProdusAsync(int id, Produs produsActualizat, CancellationToken cancellationToken);

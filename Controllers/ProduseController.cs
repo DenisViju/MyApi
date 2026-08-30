@@ -19,15 +19,36 @@ namespace MyApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ProdusDto>>> ObtineProduse(ProdusFiltruDto filtru, CancellationToken cancellationToken)
+        public async Task<ActionResult<PagedResult<ProdusDto>>> ObtineProduse
+            ([FromQuery] ProdusFiltruDto filtru,
+            int page = 1,
+            int pageSize = 10,
+            CancellationToken cancellationToken = default)
         {
-            var produse = await produsService.ObtineToateProduseleAsync(filtru, cancellationToken);
-            
-            List<ProdusDto> produseDto = produse
-                .Select(p => ProdusMapper.ToDto(p))
-                .ToList();
+            var result = await produsService.ObtineToateProduseleAsync(filtru, page, pageSize, cancellationToken);
 
-            return Ok(produseDto);
+            if (!result.Success)
+            {
+                return HandleError(result.ErrorType, result.Error);
+            }
+
+            PagedResult<Produs> pagedResult = result.Data!;
+
+            PagedResult<ProdusDto> pagedResultDto = new PagedResult<ProdusDto>
+            {
+                Data = pagedResult.Data
+                    .Select(p => ProdusMapper.ToDto(p))
+                    .ToList(),
+
+                Page = pagedResult.Page,
+                PageSize = pagedResult.PageSize,
+                TotalCount = pagedResult.TotalCount,
+                TotalPages = pagedResult.TotalPages
+            };
+
+            return Ok(pagedResultDto);
+
+            
         }
 
         [HttpGet("{id}")]

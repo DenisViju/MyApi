@@ -2,6 +2,7 @@
 using MyApi.Data;
 using MyApi.Models;
 using MyApi.DTOs;
+using MyApi.Common;
 
 namespace MyApi.Repository
 {
@@ -13,8 +14,11 @@ namespace MyApi.Repository
             this.context = context;
         }
 
-        public async Task<List<Produs>> ObtineToateProduseleAsync
-            (ProdusFiltruDto filtru, CancellationToken cancellationToken)
+        public async Task<PagedResult<Produs>> ObtineToateProduseleAsync
+            (ProdusFiltruDto filtru,
+            int page,
+            int pageSize,
+            CancellationToken cancellationToken)
         {
             IQueryable<Produs> query = context.Produse
                 .AsNoTracking()
@@ -36,10 +40,27 @@ namespace MyApi.Repository
             if(!string.IsNullOrWhiteSpace(filtru.Nume))
             {
                 query = query.Where(p => p.Nume!.Contains(filtru.Nume));
-            } 
+            }
 
-            return await query
+            int totalCount = await query.CountAsync(cancellationToken);
+            int totalPages = (int)Math.Ceiling(
+                totalCount / (double)pageSize);
+
+            int skip = (page - 1) * pageSize;
+            List<Produs> produse = await query
+                .OrderBy(p => p.Id)
+                .Skip(skip)
+                .Take(pageSize)
                 .ToListAsync(cancellationToken);
+
+            return new PagedResult<Produs>
+            {
+                Data = produse,
+                Page = page,
+                PageSize = pageSize,
+                TotalCount = totalCount,
+                TotalPages = totalPages
+            };
         }
 
         public async Task<Produs?> ObtineProdusAsync(int id, CancellationToken cancellationToken)

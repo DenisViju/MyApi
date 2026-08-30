@@ -4,6 +4,7 @@
     {
         None,
         NotFound,
-        Conflict
+        Conflict,
+        BadRequest
     }
 }
