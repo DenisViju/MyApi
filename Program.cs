@@ -11,12 +11,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container. 
 builder.Services.AddScoped<IProdusService, ProdusService>();
 builder.Services.AddScoped<IPasswordService, PasswordService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddControllers();
 builder.Services.AddProblemDetails();
 
 //Add repositories to the container
 builder.Services.AddScoped<IProdusRepository, ProdusRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 
 

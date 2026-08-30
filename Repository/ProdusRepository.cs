@@ -97,7 +97,7 @@ namespace MyApi.Repository
 
         public async Task<Produs> AdaugaProdusAsync(Produs produsNou, CancellationToken cancellationToken)
         {
-            await context.Produse.AddAsync(produsNou, cancellationToken);
+            context.Produse.Add(produsNou);
             await context.SaveChangesAsync(cancellationToken);
 
             return produsNou;

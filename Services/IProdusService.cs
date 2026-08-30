@@ -2,7 +2,7 @@
 using MyApi.Common;
 using MyApi.DTOs;
 
-namespace MyApi.Services.Interfaces
+namespace MyApi.Services
 {
     public interface IProdusService
     {
