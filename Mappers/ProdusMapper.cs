@@ -13,7 +13,8 @@ namespace MyApi.Mappers
                 Nume = produs.Nume,
                 Pret = produs.Pret,
                 CategorieId = produs.CategorieId,
-                NumeCategorie = produs.Categorie?.Nume
+                NumeCategorie = produs.Categorie?.Nume,
+                RowVersion = produs.RowVersion
             };
         }
 
@@ -33,7 +34,8 @@ namespace MyApi.Mappers
             {
                 Nume = produsUpdateDto.Nume,
                 Pret = produsUpdateDto.Pret,
-                CategorieId = produsUpdateDto.CategorieId
+                CategorieId = produsUpdateDto.CategorieId,
+                RowVersion = produsUpdateDto.RowVersion
 
             };
         }

@@ -11,5 +11,7 @@ namespace MyApi.DTOs
         public double Pret { get; set; }
         [Range (1, int.MaxValue)]
         public int CategorieId { get; set; }
+
+        public byte[] RowVersion { get; set; } = [];
     }
 }

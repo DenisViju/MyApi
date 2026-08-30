@@ -32,6 +32,10 @@ namespace MyApi.Data
                 .HasOne(p => p.Categorie)
                 .WithMany(c => c.Produse)
                 .HasForeignKey(p => p.CategorieId);
+
+            modelBuilder.Entity<Produs>()
+                .Property(p => p.RowVersion)
+                .IsRowVersion();
         }
     }
 

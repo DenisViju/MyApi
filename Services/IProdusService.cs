@@ -6,7 +6,7 @@ namespace MyApi.Services
 {
     public interface IProdusService
     {
-        Task<Result<PagedResult<Produs>>> ObtineToateProduseleAsync
+        Task<Result<PagedResult<ProdusDto>>> ObtineToateProduseleAsync
             (ProdusFiltruDto filtru,int page, int pageSize, CancellationToken cancellationToken);
         Task<Result<Produs>> ObtineProdusAsync(int id, CancellationToken cancellationToken);
         Task<Result<Produs>> AdaugaProdusAsync(Produs produs, CancellationToken cancellationToken);

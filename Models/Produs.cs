@@ -9,6 +9,7 @@
         public int CategorieId { get; set; }
         public Categorie? Categorie { get; set; }
 
-        
+        public byte[] RowVersion { get; set; } = [];
+
     }
 }

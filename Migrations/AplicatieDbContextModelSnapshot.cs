@@ -48,6 +48,12 @@ namespace MyApi.Migrations
                         .HasPrecision(10, 2)
                         .HasColumnType("REAL");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("BLOB");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategorieId");
