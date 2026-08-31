@@ -1,6 +1,10 @@
-﻿namespace MyApi.Services
+﻿using MyApi.Models;
+
+
+namespace MyApi.Services
 {
-    public class ITokenService
+    public interface ITokenService
     {
+        string GenereazaJWT(User user);
     }
 }

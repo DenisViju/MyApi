@@ -5,6 +5,7 @@
         None,
         NotFound,
         Conflict,
-        BadRequest
+        BadRequest,
+        Unauthorized
     }
 }

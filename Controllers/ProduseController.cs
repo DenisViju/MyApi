@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using MyApi.Models;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using MyApi.Common;
 using MyApi.DTOs;
 using MyApi.Mappers;
-using MyApi.Common;
+using MyApi.Models;
 using MyApi.Services;
 
 
@@ -56,6 +57,7 @@ namespace MyApi.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<ProdusDto>> CreeazaProdus
             ([FromBody] ProdusCreateDto produsCreateDto, CancellationToken cancellationToken)
         {
@@ -77,6 +79,7 @@ namespace MyApi.Controllers
             return CreatedAtAction(nameof(ObtineProdus), new { id = produsDto.Id },produsDto );
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<ActionResult<ProdusDto>> ActualizeazaProdus
             (int id, [FromBody] ProdusUpdateDto produsUpdateDto, CancellationToken cancellationToken)

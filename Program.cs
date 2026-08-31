@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using MyApi.Configuration;
 using MyApi.Data;
 using MyApi.Middleware;
@@ -27,10 +29,54 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Introdu token-ul JWT."
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+
+            IssuerSigningKey = new SymmetricSecurityKey(
+                System.Text.Encoding.UTF8.GetBytes(
+                    builder.Configuration["Jwt:Key"]!)),
+
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+
+            ValidateLifetime = true
+        };
+    });
     
 
 builder.Services.AddControllers()
@@ -54,7 +100,10 @@ using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<AplicatieDbContext>();
     await context.Database.MigrateAsync();
-    await DbSeeder.SeedAsync(context);
+    await DbSeeder.SeedAsync(
+        context,
+        scope.ServiceProvider.GetRequiredService<IPasswordService>(),
+        builder.Configuration);
 }
 
 // Configure the HTTP request pipeline.

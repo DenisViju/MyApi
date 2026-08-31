@@ -41,17 +41,18 @@ namespace MyApi.Services
 
         }
 
-        public async Task<Result<UserDto>> LoginAsync(LoginDto loginDto, CancellationToken cancellationToken)
+        public async Task<Result<LoginResponseDto>> LoginAsync(LoginDto loginDto, CancellationToken cancellationToken)
         {
             User? user = await repository.ObtineUserDupaUsernameAsync(loginDto.Username!, cancellationToken);
             if (user == null || !passwordService.VerifyPassword(loginDto.Password!, user.PasswordHash))
             {
-                return Result<UserDto>.Fail(
+                return Result<LoginResponseDto>.Fail(
                     "Username sau parola invalide",
                     ResultErrorType.Unauthorized);
             }
 
-            return Result<UserDto>.Ok(Mappers.UserMapper.ToDto(user));
+            return Result<LoginResponseDto>
+                .Ok(Mappers.UserMapper.ToLoginResponseDto(user, tokenService.GenereazaJWT(user)));
             
 
         }

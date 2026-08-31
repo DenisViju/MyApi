@@ -113,6 +113,7 @@ namespace MyApi.Repository
             if (produs == null)
                 return null;
             
+            //pt optimistic concurrency
             context.Entry(produs)
                 .Property(p => p.RowVersion)
                 .OriginalValue = produsActualizat.RowVersion;
