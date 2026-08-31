@@ -1,6 +1,6 @@
 ﻿using MyApi.Models;
 using MyApi.Common;
-using MyApi.DTOs;
+using MyApi.DTOs.Produs;
 
 namespace MyApi.Services
 {

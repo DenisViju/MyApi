@@ -32,5 +32,34 @@ namespace MyApi.Repository
             return await context.Users
                 .FirstOrDefaultAsync(u => u.Username == username, cancellationToken);
         }
+
+        public async Task<User?> ResetareParolaAsync(int id, string parolaNouaHash, CancellationToken cancellationToken)
+        {
+            User? user = await context.Users
+                .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
+            if (user == null)
+            {
+                return null;
+            }
+
+            user.PasswordHash = parolaNouaHash;
+            await context.SaveChangesAsync(cancellationToken);
+
+            return user;
+        }
+
+        public async Task<User?> ObtineUserDupaIdAsync(int id, CancellationToken cancellationToken)
+        {
+            return await context.Users
+                .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
+        }
+
+        public async Task SchimbaParolaAsync(User user, string parolaNouaHash, CancellationToken cancellationToken)
+        {
+            user.PasswordHash = parolaNouaHash;
+            await context.SaveChangesAsync(cancellationToken);
+        }
+
+
     }
 }

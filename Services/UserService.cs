@@ -1,5 +1,5 @@
 ﻿using MyApi.Common;
-using MyApi.DTOs;
+using MyApi.DTOs.User;
 using MyApi.Mappers;
 using MyApi.Models;
 using MyApi.Repository;
@@ -54,6 +54,51 @@ namespace MyApi.Services
             return Result<LoginResponseDto>
                 .Ok(Mappers.UserMapper.ToLoginResponseDto(user, tokenService.GenereazaJWT(user)));
             
+
+        }
+
+        public async Task<Result<UserDto>> ResetPasswordAsync(int id, string newPassword, CancellationToken cancellationToken)
+        {
+            string parolaNouaHash = passwordService.HashPassword(newPassword);
+            User? user = await repository.ResetareParolaAsync(id, parolaNouaHash, cancellationToken);
+            if(user == null)
+            {
+                return Result<UserDto>.Fail (
+                    "Utilizatorul nu exista",
+                    ResultErrorType.NotFound);
+            }
+
+            
+            return Result<UserDto>.Ok(Mappers.UserMapper.ToDto(user));
+
+        }
+        public async Task<Result<UserDto>> ChangePasswordAsync
+            (int userId, string currentPassword, string newPassword, CancellationToken cancellationToken)
+        {
+
+            User? user = await repository.ObtineUserDupaIdAsync(userId, cancellationToken);
+
+            if (user == null)
+            {
+                return Result<UserDto>.Fail(
+                    "Utilizatorul nu exista",
+                    ResultErrorType.NotFound);
+            }
+
+            bool parolaCorecta = passwordService.VerifyPassword(currentPassword, user.PasswordHash);
+
+            if (!parolaCorecta)
+            {
+                return Result<UserDto>.Fail(
+                    "Parola curenta este incorecta",
+                    ResultErrorType.Unauthorized);
+            }
+            string newPasswordHash = passwordService.HashPassword(newPassword);
+
+            await repository.SchimbaParolaAsync(user, newPasswordHash, cancellationToken);
+  
+            return Result<UserDto>.Ok(
+                Mappers.UserMapper.ToDto(user));
 
         }
     }

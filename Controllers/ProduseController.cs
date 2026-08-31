@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyApi.Common;
-using MyApi.DTOs;
+using MyApi.DTOs.Produs;
 using MyApi.Mappers;
 using MyApi.Models;
 using MyApi.Services;

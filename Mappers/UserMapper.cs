@@ -1,4 +1,4 @@
-﻿using MyApi.DTOs;
+﻿using MyApi.DTOs.User;
 using MyApi.Models;
 using MyApi.Services;
 

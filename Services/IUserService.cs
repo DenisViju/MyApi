@@ -1,5 +1,5 @@
 ﻿using MyApi.Common;
-using MyApi.DTOs;
+using MyApi.DTOs.User;
 using MyApi.Models;
 
 
@@ -9,5 +9,8 @@ namespace MyApi.Services
     {
         Task<Result<UserDto>> RegisterAsync(RegisterDto registerDto, CancellationToken cancellationToken);
         Task<Result<LoginResponseDto>> LoginAsync(LoginDto loginDto, CancellationToken cancellationToken);
+        Task<Result<UserDto>> ResetPasswordAsync(int id, string newPassword, CancellationToken cancellationToken);
+        Task<Result<UserDto>> ChangePasswordAsync
+            (int userId, string currentPassword, string newPassword, CancellationToken cancellationToken);
     }
 }

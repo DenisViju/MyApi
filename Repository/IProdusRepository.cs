@@ -1,6 +1,6 @@
-﻿using MyApi.DTOs;
-using MyApi.Models;
+﻿using MyApi.Models;
 using MyApi.Common;
+using MyApi.DTOs.Produs;
 
 namespace MyApi.Repository
 {

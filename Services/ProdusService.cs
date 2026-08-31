@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyApi.Common;
-using MyApi.DTOs;
+using MyApi.DTOs.Produs;
 using MyApi.Models;
 using MyApi.Repository;
 

@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using MyApi.Common;
+using MyApi.DTOs.User;
 using MyApi.Services;
-using MyApi.DTOs;
+using System.Security.Claims;
 
 namespace MyApi.Controllers
 {
@@ -40,5 +43,46 @@ namespace MyApi.Controllers
             }
             return Ok(result.Data);
         }
+
+        [HttpPut("{id}/reset-password")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<UserDto>> ResetPassword
+            (int id, [FromBody] ResetPasswordDto changePasswordDto, CancellationToken cancellationToken)
+        {
+            Result<UserDto> result = await service.ResetPasswordAsync(id, changePasswordDto.NewPassword, cancellationToken);
+            if(!result.Success)
+            {
+                return  HandleError(result.ErrorType, result.Error); 
+            }
+            return Ok(result.Data);
+            
+        }
+
+        [HttpPut("change-password")]
+        [Authorize]
+        public async Task<ActionResult<UserDto>> ChangePassword
+            ([FromBody] ChangePasswordDto changePasswordDto, CancellationToken cancellationToken)
+        {
+            string? userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            
+            if (!int.TryParse(userIdClaim, out int userId))
+            {
+                return Unauthorized();
+            }
+
+            Result<UserDto> result = await service.ChangePasswordAsync(
+                userId,
+                changePasswordDto.CurrentPassword,
+                changePasswordDto.NewPassword,
+                cancellationToken);
+
+            if (!result.Success)
+            {
+                return HandleError(result.ErrorType, result.Error);
+            }
+
+            return Ok(result.Data);
+        }
+
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyApi.Common;
 using MyApi.Data;
-using MyApi.DTOs;
+using MyApi.DTOs.Produs;
 using MyApi.Models;
 using System.Linq;
 

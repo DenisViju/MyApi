@@ -1,4 +1,4 @@
-﻿namespace MyApi.DTOs
+﻿namespace MyApi.DTOs.Produs
 {
     public class ProdusDto
     {

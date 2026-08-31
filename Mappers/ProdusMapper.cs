@@ -1,4 +1,4 @@
-﻿using MyApi.DTOs;
+﻿using MyApi.DTOs.Produs;
 using MyApi.Models;
 
 namespace MyApi.Mappers
