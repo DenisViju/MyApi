@@ -16,6 +16,14 @@ namespace MyApi.Mappers
                 Role = user.Role
             };
         }
+        public static LoginResponseDto ToLoginResponseDto (User user, string token)
+        {
+            return new LoginResponseDto
+            {
+                UserDto = ToDto(user),
+                Token = token
+            };
+        }
         public static User ToEntity(RegisterDto registerDto, string passwordHash )
         {
          

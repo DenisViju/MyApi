@@ -30,7 +30,7 @@ namespace MyApi.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<UserDto>> Login
+        public async Task<ActionResult<LoginResponseDto>> Login
             ([FromBody] LoginDto loginDto, CancellationToken cancellationToken)
         {
             var result = await service.LoginAsync(loginDto, cancellationToken);

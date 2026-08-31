@@ -10,7 +10,7 @@ namespace MyApi.DTOs
         public string? Username { get; set; }
 
         [Required]
-        [MinLength(4)]
+        [StringLength(100, MinimumLength = 4)]
         public string? Password { get; set; }
     }
 }

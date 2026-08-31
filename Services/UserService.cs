@@ -10,10 +10,12 @@ namespace MyApi.Services
     {
         private readonly IUserRepository repository;
         private readonly IPasswordService passwordService;
-        public UserService(IUserRepository repository, IPasswordService passwordService)
+        private readonly ITokenService tokenService;
+        public UserService(IUserRepository repository, IPasswordService passwordService, ITokenService tokenService)
         {
             this.repository = repository;
             this.passwordService = passwordService;
+            this.tokenService = tokenService;
         }
 
         public async Task<Result<UserDto>> RegisterAsync(RegisterDto registerDto, CancellationToken cancellationToken)
@@ -41,8 +43,8 @@ namespace MyApi.Services
 
         public async Task<Result<UserDto>> LoginAsync(LoginDto loginDto, CancellationToken cancellationToken)
         {
-            User? user = await repository.ObtineUserDupaUsernameAsync(loginDto.Username, cancellationToken);
-            if (user == null || !passwordService.VerifyPassword(loginDto.Password, user.PasswordHash))
+            User? user = await repository.ObtineUserDupaUsernameAsync(loginDto.Username!, cancellationToken);
+            if (user == null || !passwordService.VerifyPassword(loginDto.Password!, user.PasswordHash))
             {
                 return Result<UserDto>.Fail(
                     "Username sau parola invalide",
