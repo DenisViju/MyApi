@@ -27,6 +27,7 @@ namespace MyApi.Controllers
             {
                 ResultErrorType.Conflict => Conflict(CreateProblemDetails(409, error)),
                 ResultErrorType.NotFound => NotFound(CreateProblemDetails(404, error)),
+                ResultErrorType.Unauthorized => Unauthorized(CreateProblemDetails(401, error)),
                 _ => BadRequest(CreateProblemDetails(400, error))
             };
 

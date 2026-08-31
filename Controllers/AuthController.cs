@@ -29,6 +29,16 @@ namespace MyApi.Controllers
             return StatusCode(201, result.Data);
         }
 
-
+        [HttpPost("login")]
+        public async Task<ActionResult<UserDto>> Login
+            ([FromBody] LoginDto loginDto, CancellationToken cancellationToken)
+        {
+            var result = await service.LoginAsync(loginDto, cancellationToken);
+            if (!result.Success)
+            {
+               return HandleError(result.ErrorType, result.Error);
+            }
+            return Ok(result.Data);
+        }
     }
 }

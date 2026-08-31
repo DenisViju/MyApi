@@ -16,7 +16,7 @@ namespace MyApi.Services
             this.passwordService = passwordService;
         }
 
-        public async Task<Result<UserDto>> RegisterAsync(RegisterDto registerDto,  CancellationToken cancellationToken)
+        public async Task<Result<UserDto>> RegisterAsync(RegisterDto registerDto, CancellationToken cancellationToken)
         {
             bool exista = await repository.ExistaUsernameAsync(registerDto.Username, cancellationToken);
             if (exista)
@@ -35,8 +35,23 @@ namespace MyApi.Services
             UserDto userDto = UserMapper.ToDto(userSalvat);
 
             return Result<UserDto>.Ok(userDto);
-                
-               
+
+
+        }
+
+        public async Task<Result<UserDto>> LoginAsync(LoginDto loginDto, CancellationToken cancellationToken)
+        {
+            User? user = await repository.ObtineUserDupaUsernameAsync(loginDto.Username, cancellationToken);
+            if (user == null || !passwordService.VerifyPassword(loginDto.Password, user.PasswordHash))
+            {
+                return Result<UserDto>.Fail(
+                    "Username sau parola invalide",
+                    ResultErrorType.Unauthorized);
+            }
+
+            return Result<UserDto>.Ok(Mappers.UserMapper.ToDto(user));
+            
+
         }
     }
 }

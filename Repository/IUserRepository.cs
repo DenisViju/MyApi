@@ -6,5 +6,6 @@ namespace MyApi.Repository
     {
         Task<bool> ExistaUsernameAsync(string username, CancellationToken cancellationToken);
         Task<User> CreeazaUserAsync(User userNou, CancellationToken cancellationToken);  
+        Task<User?> ObtineUserDupaUsernameAsync(string username, CancellationToken cancellationToken);
     }
 }

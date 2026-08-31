@@ -26,5 +26,11 @@ namespace MyApi.Repository
             
             return user;
         }
+
+        public async Task<User?> ObtineUserDupaUsernameAsync(string username, CancellationToken cancellationToken)
+        {
+            return await context.Users
+                .FirstOrDefaultAsync(u => u.Username == username, cancellationToken);
+        }
     }
 }
