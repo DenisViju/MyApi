@@ -84,5 +84,20 @@ namespace MyApi.Controllers
             return Ok(result.Data);
         }
 
+        [HttpPost("refresh")]
+        public async Task<ActionResult<LoginResponseDto>> Refresh
+            ([FromBody] RefreshTokenDto refreshTokenDto, CancellationToken cancellationToken)
+        {
+            Result<LoginResponseDto> result = await service.
+                RefreshTokenAsync(refreshTokenDto.RefreshToken, cancellationToken);
+
+            if (!result.Success)
+            {
+                return HandleError(result.ErrorType, result.Error);
+            }
+
+            return Ok(result.Data);
+        }
+
     }
 }

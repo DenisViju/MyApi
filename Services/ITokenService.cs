@@ -6,5 +6,6 @@ namespace MyApi.Services
     public interface ITokenService
     {
         string GenereazaJWT(User user);
+        string GenereazaRefreshToken();
     }
 }

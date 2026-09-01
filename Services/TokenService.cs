@@ -4,6 +4,7 @@ using MyApi.Configuration;
 using MyApi.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 
 namespace MyApi.Services
 {
@@ -35,11 +36,17 @@ namespace MyApi.Services
                 issuer: options.Value.Issuer,
                 audience: options.Value.Audience,
                 claims: claims,
-                expires: DateTime.UtcNow.AddHours(options.Value.ExpiryHours),
+                expires: DateTime.UtcNow.AddMinutes(options.Value.ExpiryMinutes),
                 signingCredentials: signingCredentials);
 
             JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
             return handler.WriteToken(token);
+        }
+        public string GenereazaRefreshToken()
+        {
+            byte[] randomBytes = RandomNumberGenerator.GetBytes(64);
+
+            return Convert.ToBase64String(randomBytes);
         }
     }
 }

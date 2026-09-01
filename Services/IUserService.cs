@@ -12,5 +12,6 @@ namespace MyApi.Services
         Task<Result<UserDto>> ResetPasswordAsync(int id, string newPassword, CancellationToken cancellationToken);
         Task<Result<UserDto>> ChangePasswordAsync
             (int userId, string currentPassword, string newPassword, CancellationToken cancellationToken);
+        Task<Result<LoginResponseDto>> RefreshTokenAsync(string refreshToken,CancellationToken cancellationToken);
     }
 }

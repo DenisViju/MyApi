@@ -14,6 +14,7 @@ namespace MyApi.Data
         public DbSet<Produs> Produse { get; set; }
         public DbSet<Categorie> Categorii { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -61,6 +62,12 @@ namespace MyApi.Data
                 .IsRequired()
                 .HasMaxLength(20);
 
+
+            modelBuilder.Entity<RefreshToken>()
+                .HasOne(rt => rt.User)
+                .WithMany(u => u.RefreshTokens)
+                .HasForeignKey(rt => rt.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
 
         }
