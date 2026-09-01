@@ -99,5 +99,20 @@ namespace MyApi.Controllers
             return Ok(result.Data);
         }
 
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout
+            ([FromBody] RefreshTokenDto refreshTokenDto, CancellationToken cancellationToken)
+        {
+            Result<bool> result = await service.
+                LogoutAsync(refreshTokenDto.RefreshToken, cancellationToken);
+
+            if(!result.Success)
+            {
+                return HandleError(result.ErrorType, result.Error);
+            }
+
+            return NoContent();
+        }
+
     }
 }

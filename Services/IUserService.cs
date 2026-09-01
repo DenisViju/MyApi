@@ -13,5 +13,6 @@ namespace MyApi.Services
         Task<Result<UserDto>> ChangePasswordAsync
             (int userId, string currentPassword, string newPassword, CancellationToken cancellationToken);
         Task<Result<LoginResponseDto>> RefreshTokenAsync(string refreshToken,CancellationToken cancellationToken);
+        Task<Result<bool>> LogoutAsync(string refreshToken, CancellationToken cancellationToken);
     }
 }

@@ -155,7 +155,8 @@ namespace MyApi.Services
 
             User user = refreshTokenEntity.User;
 
-            await refreshTokenRepository
+            //de adaugat un transactions pentru revoca si salveaza async
+             await refreshTokenRepository
                 .RevocaAsync(refreshTokenEntity, cancellationToken);
 
             string accessToken = tokenService.GenereazaJWT(user);
@@ -173,7 +174,32 @@ namespace MyApi.Services
             await refreshTokenRepository.SalveazaAsync(newRefreshTokenEntity,cancellationToken);
 
             return Result<LoginResponseDto>.Ok(Mappers.UserMapper
-                .ToLoginResponseDto(user,accessToken, refreshToken));
+                .ToLoginResponseDto(user,accessToken, newRefreshToken));
+        }
+
+        public async Task<Result<bool>> LogoutAsync(string refreshToken, CancellationToken cancellationToken)
+        {
+            RefreshToken? refreshTokenEntity = await refreshTokenRepository
+                .ObtineDupaTokenAsync(refreshToken, cancellationToken);
+
+            if(refreshTokenEntity ==  null)
+            {
+                return Result<bool>.Fail(
+                    "Refresh token invalid",
+                    ResultErrorType.Unauthorized);
+            }
+            
+            if(refreshTokenEntity.IsRevoked)
+            {
+                return Result<bool>.Fail(
+                    "Refresh token deja revocat",
+                    ResultErrorType.Unauthorized);
+            }
+
+            await refreshTokenRepository.RevocaAsync(refreshTokenEntity, cancellationToken);
+
+            return Result<bool>.Ok(true);
+            
         }
     }
 }

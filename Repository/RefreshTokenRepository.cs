@@ -30,7 +30,7 @@ namespace MyApi.Repository
         public async Task RevocaAsync(RefreshToken refreshToken, CancellationToken cancellationToken)
         {
             refreshToken.IsRevoked = true;
-            await context.SaveChangesAsync(cancellationToken);  
+            await context.SaveChangesAsync(cancellationToken);
         }
     }
 }
