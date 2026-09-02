@@ -1,4 +1,6 @@
-﻿namespace MyApi.Common
+﻿using MyApi.Enums;
+
+namespace MyApi.Common
 {
     public class Result<T>
     {

@@ -106,9 +106,10 @@ namespace MyApi.Repository
 
         public async Task StergeCategorieAsync(Categorie categorie, CancellationToken cancellationToken)
         {
-            
+           
             context.Categorii.Remove(categorie);
             await context.SaveChangesAsync(cancellationToken);
+
 
         }
         public async Task<bool> ExistaCategorieCuNumeleAsync(string nume, CancellationToken cancellationToken)

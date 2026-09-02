@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MyApi.Common;
+using MyApi.Enums;
 
 namespace MyApi.Controllers
 {

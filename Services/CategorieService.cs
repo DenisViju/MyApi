@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyApi.Common;
 using MyApi.DTOs.Categorie;
+using MyApi.Enums;
 using MyApi.Models;
 using MyApi.Repository;
 

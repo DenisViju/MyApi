@@ -1,4 +1,4 @@
-﻿namespace MyApi.Common
+﻿namespace MyApi.Enums
 {
     public enum ResultErrorType
     {

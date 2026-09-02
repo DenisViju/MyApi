@@ -37,7 +37,7 @@ namespace MyApi.Data
 
                     // Alimentare
                     new Produs { Nume = "Paine", Pret = 5, CategorieId = categorii[1].Id },
-                    new Produs { Nume = "Lapte", Pret = 7.5, CategorieId = categorii[1].Id },
+                    new Produs { Nume = "Lapte", Pret = 7.5M, CategorieId = categorii[1].Id },
                     new Produs { Nume = "Cafea boabe 1kg", Pret = 55, CategorieId = categorii[1].Id },
                     new Produs { Nume = "Ciocolata", Pret = 12, CategorieId = categorii[1].Id },
                     new Produs { Nume = "Ulei de masline", Pret = 35, CategorieId = categorii[1].Id },

@@ -2,6 +2,7 @@
 using MyApi.Common;
 using MyApi.Configuration;
 using MyApi.DTOs.User;
+using MyApi.Enums;
 using MyApi.Mappers;
 using MyApi.Models;
 using MyApi.Repository;

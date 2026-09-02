@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyApi.Common;
 using MyApi.DTOs.Produs;
+using MyApi.Enums;
 using MyApi.Models;
 using MyApi.Repository;
 
@@ -71,6 +72,7 @@ namespace MyApi.Services
             }
 
             Produs produsSalvat = await repository.AdaugaProdusAsync(produs, cancellationToken);
+
 
             return Result<Produs>.Ok(produsSalvat);
         }

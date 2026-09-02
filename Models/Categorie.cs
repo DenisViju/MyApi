@@ -5,7 +5,7 @@
         public int Id { get; set; }
         public string? Nume { get; set; }
 
-        public List<Produs> Produse { get; set; } = new List<Produs>();
+        public ICollection<Produs> Produse { get; set; } = [];
         public byte[] RowVersion { get; set; } = [];
     }
 }
