@@ -1,11 +1,9 @@
-﻿namespace MyApi.Models
+﻿namespace MyApi.DTOs.Categorie
 {
-    public class Categorie
+    public class CategorieDto
     {
         public int Id { get; set; }
         public string? Nume { get; set; }
-
-        public List<Produs> Produse { get; set; } = new List<Produs>();
         public byte[] RowVersion { get; set; } = [];
     }
 }

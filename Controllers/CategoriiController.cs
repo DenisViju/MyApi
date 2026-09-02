@@ -1,75 +1,87 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using MyApi.Data;
-using MyApi.DTOs;
-using MyApi.Models;
+using MyApi.Common;
+using MyApi.DTOs.Categorie;
+using MyApi.Services;
 
 namespace MyApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CategoriiController : ControllerBase
+    public class CategoriiController : BaseController
     {
-        private readonly AplicatieDbContext context;
-        public CategoriiController(AplicatieDbContext context)
+        private readonly ICategorieService service;
+        public CategoriiController(ICategorieService service)
         {
-            this.context = context;
+            this.service = service;
         }
 
         [HttpGet]
-        public async Task<IActionResult> ObtineCategorii()
+        public async Task<ActionResult<PagedResult<CategorieDto>>> ObtineCategorii
+            ([FromQuery] CategorieFiltruDto filtru, int page = 1, int pageSize = 10, CancellationToken cancellationToken = default)
         {
-            List<Categorie> categorii = await context.Categorii.ToListAsync();
+            Result<PagedResult<CategorieDto>> result = await service
+                .ObtineCategoriiAsync(filtru, page, pageSize, cancellationToken);
 
-            return Ok(categorii);
+            if(!result.Success)
+            {
+                return HandleError(result.ErrorType, result.Error);
+            }
+
+            return Ok(result.Data!);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> ObtineCategorie(int id)
+        public async Task<ActionResult<CategorieDto>> ObtineCategorie(int id, CancellationToken cancellationToken)
         {
-            Categorie? categorie = await context.Categorii.FirstOrDefaultAsync(c => c.Id == id);
-            if (categorie == null)
+            Result<CategorieDto> result = await service.ObtineCategorieAsync(id, cancellationToken);
+
+            if (!result.Success)
             {
-                return NotFound();
+                return HandleError(result.ErrorType, result.Error);
             }
-            return Ok(categorie);
+
+            return Ok(result.Data);
 
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreeazaCategorie([FromBody] Categorie categorieNoua)
+        public async Task<ActionResult<CategorieDto>> CreeazaCategorie
+            ([FromBody] CategorieCreateDto categorieCreateDto, CancellationToken cancellationToken)
         {
-            await context.Categorii.AddAsync(categorieNoua);
-            await context.SaveChangesAsync();
+            var result = await service.AdaugaCategorieAsync(categorieCreateDto, cancellationToken);
+            
+            if(!result.Success)
+            {
+                return HandleError(result.ErrorType, result.Error);
+            }
 
-            return CreatedAtAction(nameof(ObtineCategorie), new { id = categorieNoua.Id }, categorieNoua);
+            return CreatedAtAction(nameof(ObtineCategorie), new { id = result.Data!.Id }, result.Data);
 
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> ActualizeazaCategorie(int id, [FromBody] Categorie categorieActualizata)
-        {
-            Categorie? categorie = await context.Categorii.FirstOrDefaultAsync(c => c.Id == id);
-            if (categorie == null)
-            {
-                return NotFound();
-            }
-            categorie.Nume = categorieActualizata.Nume;
-            await context.SaveChangesAsync();
-            return Ok(categorie);
 
+        [HttpPut("{id}")]
+        public async Task<ActionResult<CategorieDto>> ActualizeazaCategorie
+            (int id, [FromBody] CategorieUpdateDto categorieUpdateDto, CancellationToken cancellationToken)
+        {
+            var result = await service.ActualizeazaCategorieAsync (id, categorieUpdateDto, cancellationToken);
+
+            if(!result.Success)
+            {
+                return HandleError(result.ErrorType, result.Error);
+            }
+
+            return Ok(result.Data);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> StergeCategorie(int id)
+        public async Task<IActionResult> StergeCategorie(int id, CancellationToken cancellationToken)
         {
-            Categorie? categorie = await context.Categorii.FirstOrDefaultAsync(c => c.Id == id);
-            if (categorie == null)
+            var result = await service.StergeCategorieAsync(id, cancellationToken);   
+            if(!result.Success)
             {
-                return NotFound();
+                return HandleError(result.ErrorType, result.Error);
             }
-            context.Categorii.Remove(categorie);
-            await context.SaveChangesAsync();   
             return NoContent();
         }
 

@@ -9,7 +9,7 @@ namespace MyApi.Data
         public static async Task SeedAsync
             (AplicatieDbContext context, IPasswordService passwordService, IConfiguration configuration)
         {
-            if (await context.Categorii.AnyAsync())
+            if (!await context.Categorii.AnyAsync())
             {
 
                     var categorii = new List<Categorie>

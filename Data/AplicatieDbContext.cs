@@ -31,6 +31,9 @@ namespace MyApi.Data
                 .HasPrecision(10, 2);
 
             modelBuilder.Entity<Produs>()
+               .ToTable(t => t.HasCheckConstraint("CK_Produs_Pret_GreaterThanZero", "Pret >= 0"));
+
+            modelBuilder.Entity<Produs>()
                 .HasOne(p => p.Categorie)
                 .WithMany(c => c.Produse)
                 .HasForeignKey(p => p.CategorieId);
@@ -38,7 +41,7 @@ namespace MyApi.Data
             modelBuilder.Entity<Produs>()
                 .Property(p => p.RowVersion)
                 .IsRowVersion();
-
+           
 
 
             modelBuilder.Entity<User>()
@@ -64,12 +67,40 @@ namespace MyApi.Data
 
 
             modelBuilder.Entity<RefreshToken>()
-                .HasOne(rt => rt.User)
-                .WithMany(u => u.RefreshTokens)
-                .HasForeignKey(rt => rt.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasKey(rt => rt.Id);
+
+            modelBuilder.Entity<RefreshToken>()
+               .HasOne(rt => rt.User)
+               .WithMany(u => u.RefreshTokens)
+               .HasForeignKey(rt => rt.UserId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<RefreshToken>()
+                .Property(rt => rt.Token)
+                .IsRequired()
+                .HasMaxLength(250);
+
+            modelBuilder.Entity<RefreshToken>()
+                .HasIndex(rt => rt.Token)
+                .IsUnique();
 
 
+
+            modelBuilder.Entity<Categorie>()
+                .HasKey(c => c.Id);
+
+            modelBuilder.Entity<Categorie>()
+                .Property(c => c.Nume)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            modelBuilder.Entity<Categorie>()
+                .HasIndex(c => c.Nume)
+                .IsUnique();
+
+            modelBuilder.Entity<Categorie>()
+                .Property(c => c.RowVersion)
+                .IsRowVersion();
         }
     }
 

@@ -3,7 +3,7 @@ using MyApi.Common;
 using MyApi.Data;
 using MyApi.DTOs.Produs;
 using MyApi.Models;
-using System.Linq;
+
 
 namespace MyApi.Repository
 {
@@ -29,7 +29,8 @@ namespace MyApi.Repository
                     Nume = p.Nume,
                     Pret = p.Pret,
                     CategorieId = p.CategorieId,
-                    NumeCategorie = p.Categorie!.Nume
+                    NumeCategorie = p.Categorie!.Nume,
+                    RowVersion = p.RowVersion
                 });
 
             if (filtru.CategorieId.HasValue)

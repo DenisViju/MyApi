@@ -17,6 +17,7 @@ builder.Services.AddScoped<IProdusService, ProdusService>();
 builder.Services.AddScoped<IPasswordService, PasswordService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<ICategorieService, CategorieService>();
 
 builder.Services.AddControllers();
 builder.Services.AddProblemDetails();
@@ -25,6 +26,7 @@ builder.Services.AddProblemDetails();
 builder.Services.AddScoped<IProdusRepository, ProdusRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+builder.Services.AddScoped<ICategorieRepository, CategorieRepository>();
 
 
 
