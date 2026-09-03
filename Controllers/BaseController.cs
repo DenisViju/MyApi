@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyApi.Enums;
+using System.Security.Claims;
 
 namespace MyApi.Controllers
 {
@@ -32,6 +33,16 @@ namespace MyApi.Controllers
             };
 
             
+        }
+        protected int ObtineUserId()
+        {
+            string? userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (!int.TryParse(userIdClaim, out int userId))
+            {
+                return -1;
+            }
+            return userId;
         }
     }
 }
