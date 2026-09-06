@@ -8,7 +8,9 @@ namespace MyApi.Repository
     {
         Task<PagedResult<ProdusDto>> ObtineToateProduseleAsync
             (ProdusFiltruDto filtru, int page, int pageSize, CancellationToken cancellationToken);
+        Task<List<Produs>> ObtineProduseleAsync(List<int> produseIds, CancellationToken cancellationToken);
         Task<Produs?> ObtineProdusAsync(int id, CancellationToken cancellationToken);
+        Task<Produs?> ObtineProdusTrackingAsync(int id, CancellationToken cancellationToken);
         Task<Produs> AdaugaProdusAsync(Produs produs, CancellationToken cancellationToken);
         Task<Produs?> ActualizeazaProdusAsync(int id, Produs produsActualizat, CancellationToken cancellationToken);
         Task<bool> StergeProdusAsync(int id, CancellationToken cancellationToken);

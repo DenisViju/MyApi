@@ -12,6 +12,7 @@ namespace MyApi.Mappers
                 Id = produs.Id,
                 Nume = produs.Nume,
                 Pret = produs.Pret,
+                Stoc = produs.Stoc,
                 CategorieId = produs.CategorieId,
                 NumeCategorie = produs.Categorie?.Nume,
                 RowVersion = produs.RowVersion
@@ -24,6 +25,7 @@ namespace MyApi.Mappers
             {
                 Nume = produsCreateDto.Nume,
                 Pret = produsCreateDto.Pret,
+                Stoc = produsCreateDto.Stoc,
                 CategorieId = produsCreateDto.CategorieId
 
             };
@@ -34,6 +36,7 @@ namespace MyApi.Mappers
             {
                 Nume = produsUpdateDto.Nume,
                 Pret = produsUpdateDto.Pret,
+                Stoc = produsUpdateDto.Stoc,
                 CategorieId = produsUpdateDto.CategorieId,
                 RowVersion = produsUpdateDto.RowVersion
 

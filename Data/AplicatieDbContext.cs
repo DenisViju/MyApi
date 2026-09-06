@@ -113,6 +113,7 @@ namespace MyApi.Data
                 entity.Property(c => c.Strada).IsRequired().HasMaxLength(150);
                 entity.Property(c => c.Oras).IsRequired().HasMaxLength(100);
                 entity.Property(c => c.Judet).IsRequired().HasMaxLength(50);
+                entity.Property(c => c.Tara).IsRequired().HasMaxLength(50);
                 entity.Property(c => c.CodPostal).IsRequired().HasMaxLength(10);
                 entity.Property(c => c.TelefonDestinatar).IsRequired().HasMaxLength(20);
 

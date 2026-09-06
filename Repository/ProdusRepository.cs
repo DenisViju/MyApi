@@ -28,6 +28,7 @@ namespace MyApi.Repository
                     Id = p.Id,
                     Nume = p.Nume,
                     Pret = p.Pret,
+                    Stoc = p.Stoc,
                     CategorieId = p.CategorieId,
                     NumeCategorie = p.Categorie!.Nume,
                     RowVersion = p.RowVersion
@@ -87,6 +88,16 @@ namespace MyApi.Repository
                 TotalPages = totalPages
             };
         }
+        public async Task<List<Produs>> ObtineProduseleAsync(List<int> produseIds, CancellationToken cancellationToken)
+        {
+           
+            return await context.Produse
+                .Where(p => produseIds.Contains(p.Id))
+                .ToListAsync(cancellationToken);
+           
+        }
+
+        
 
         public async Task<Produs?> ObtineProdusAsync(int id, CancellationToken cancellationToken)
         {
@@ -95,6 +106,12 @@ namespace MyApi.Repository
                 .Include(p => p.Categorie)
                 .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
         }
+        public async Task<Produs?> ObtineProdusTrackingAsync(int id, CancellationToken cancellationToken)
+        {
+            return await context.Produse
+                .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+        }
+
 
         public async Task<Produs> AdaugaProdusAsync(Produs produsNou, CancellationToken cancellationToken)
         {
@@ -121,6 +138,7 @@ namespace MyApi.Repository
 
             produs.Nume = produsActualizat.Nume;
             produs.Pret = produsActualizat.Pret;
+            produs.Stoc = produsActualizat.Stoc;
             produs.CategorieId = produsActualizat.CategorieId;
 
             await context.SaveChangesAsync(cancellationToken);
