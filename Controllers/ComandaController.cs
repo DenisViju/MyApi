@@ -94,7 +94,7 @@ namespace MyApi.Controllers
         [HttpGet("admin")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<PagedResult<ComandaDto>>> ObtineToateComenzile
-            (ComandaFiltruDto filtru, int page, int pageSize, CancellationToken cancellationToken)
+            ([FromQuery]ComandaFiltruDto filtru, int page, int pageSize, CancellationToken cancellationToken)
         {
             var result = await service.ObtineToateComenzileAsync(filtru, page, pageSize, cancellationToken);
 
