@@ -6,6 +6,7 @@
         public string Nume { get; set; } = string.Empty;
         public decimal Pret { get; set; }
         public int Stoc {  get; set; }
+        public string Descriere { get; set; } = string.Empty;
 
         public int CategorieId { get; set; }
         public Categorie? Categorie { get; set; }

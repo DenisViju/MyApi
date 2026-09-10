@@ -26,6 +26,7 @@ namespace MyApi.Data
                 entity.HasKey(p => p.Id);
 
                 entity.Property(p => p.Nume).IsRequired().HasMaxLength(100);
+                entity.Property(p => p.Descriere).IsRequired().HasMaxLength(1000);
                 entity.Property(p => p.Pret).HasPrecision(10, 2);
                 entity.Property(p => p.RowVersion).IsRowVersion();
 

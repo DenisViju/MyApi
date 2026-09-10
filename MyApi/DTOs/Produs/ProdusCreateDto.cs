@@ -7,6 +7,9 @@ namespace MyApi.DTOs.Produs
         [Required]
         [MaxLength(100)]
         public string Nume { get; set; } = string.Empty;
+        [Required]
+        [MaxLength(1000)]
+        public string Descriere { get; set; } = string.Empty;
         [Range(0.01, 1000000)]
         public decimal Pret {  get; set; }
 
