@@ -34,7 +34,8 @@ namespace MyApi.Middleware
         }
         public async Task HandleExceptionAsync(HttpContext context)
         {
-            
+            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+
             var problemDetails = new ProblemDetails
             {
                 Type = "https://httpstatuses.com/500",

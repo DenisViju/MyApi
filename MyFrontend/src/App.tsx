@@ -1,22 +1,18 @@
 import './App.css'
-import Navbar from './components/Navbar'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+
+import HomePage from './pages/HomePage'
+import ProductsPage from './pages/ProductsPage'
 
 function App() {
   return (
-    <div>
-      <Navbar
-       titlu="Magazin Online"
-       afiseazaCos={true}
-      />
-  
-      <main>
-        <h2>Bine ati venit la magazinul nostru online</h2>
-        <p>Descopera produsele noastre</p>
-        
-        <button>Vezi produsele</button>
-      </main>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element = {<HomePage />}></Route>
+        <Route path="/products" element = {<ProductsPage />}></Route>
+      </Routes>
+    </BrowserRouter>
 
-    </div>
   )
 }
 

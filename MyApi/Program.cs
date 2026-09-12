@@ -24,6 +24,19 @@ builder.Services.AddScoped<IComandaService, ComandaService>();
 builder.Services.AddControllers();
 builder.Services.AddProblemDetails();
 
+// Configurare CORS pentru a permite cererile de la frontend
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins("http://localhost:5173") 
+                                .AllowAnyHeader()
+                                .AllowAnyMethod();
+                      });
+});
+
 //Add repositories to the container
 builder.Services.AddScoped<IProdusRepository, ProdusRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -123,6 +136,8 @@ if (app.Environment.IsDevelopment())
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
+
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthentication();
 app.UseAuthorization();
