@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage'
 import ProductsPage from './pages/ProductsPage'
 import ProductDetailsPage from './pages/ProductDetailsPage'
 import Navbar from './components/Navbar'
+import CartPage from './pages/CartPage'
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/" element = {<HomePage />}></Route>
           <Route path="/products" element = {<ProductsPage />}></Route>
           <Route path="/products/:id" element = {<ProductDetailsPage />}></Route>
+          <Route path="/cart" element = {<CartPage />} ></Route>
         </Routes>
       </CartProvider>
     </BrowserRouter>

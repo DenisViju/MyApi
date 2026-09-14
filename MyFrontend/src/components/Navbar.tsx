@@ -13,12 +13,12 @@ function Navbar() {
     <header>
       <Link to="/">Magazin Online</Link>
 
-      <nav aria-label="Navigare principală">
-        <Link to="/">Acasă</Link>
+      <nav aria-label="Navigare principala">
+        <Link to="/">Acasa</Link>
         <Link to="/products">Produse</Link>
       </nav>
 
-      <span>Coș ({numarProduseInCos})</span>
+      <Link to="/cart">Cos ({numarProduseInCos})</Link>
     </header>
   )
 }
