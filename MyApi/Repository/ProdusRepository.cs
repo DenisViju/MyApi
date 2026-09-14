@@ -27,6 +27,7 @@ namespace MyApi.Repository
                 {
                     Id = p.Id,
                     Nume = p.Nume,
+                    Descriere = p.Descriere,
                     Pret = p.Pret,
                     Stoc = p.Stoc,
                     CategorieId = p.CategorieId,

@@ -1,46 +1,26 @@
-import { useState } from "react"
+import { Link } from 'react-router-dom'
+import { useCart } from '../context/CartContext'
 
-type NavbarProps = {
-  titlu: string
-  afiseazaCos: boolean
-}
+function Navbar() {
+  const { items } = useCart()
 
-function Navbar(props : NavbarProps) {
-    const [numarProduse, setNumarProduse] = useState(0)
-    const [nume, setNume] = useState("")
+  const numarProduseInCos = items.reduce(
+    (total, item) => total + item.cantitate,
+    0
+  )
 
-    function adaugaProdus() {
-        setNumarProduse(numarProduseActual => numarProduseActual + 1)
-    }
-    function stergeProdus() {
-        setNumarProduse(numarProduseActual => 
-            numarProduseActual > 0 
-                ? numarProduseActual - 1
-                : 0
-        )
-    }
-    function actualizeazaNume(eveniment: React.ChangeEvent<HTMLInputElement>) {
-        setNume(eveniment.target.value)
-    }
-    return (
-        <><header>
-            <h1>{props.titlu}</h1>
-            {props.afiseazaCos &&
-                <span>Cos ({numarProduse}) </span>}
-            <button onClick={adaugaProdus}>
-                Adauga Produs
-            </button>
-            <span>   </span>
-            <button onClick={stergeProdus}>
-                Sterge Produs
-            </button>
-        </header><label>
-                Nume:
-                <input onChange={actualizeazaNume} />
-                <p>Salut, {nume} </p>
-            </label></>
-    )
+  return (
+    <header>
+      <Link to="/">Magazin Online</Link>
+
+      <nav aria-label="Navigare principală">
+        <Link to="/">Acasă</Link>
+        <Link to="/products">Produse</Link>
+      </nav>
+
+      <span>Coș ({numarProduseInCos})</span>
+    </header>
+  )
 }
 
 export default Navbar
-
