@@ -4,7 +4,7 @@ import { useCart } from "../context/CartContext";
 
 function CartPage() {
 
-    const { items } = useCart()
+    const { items, actualizeazaCantitate, stergeProdus } = useCart()
 
     const total = items.reduce(
         (suma, item) => suma + item.produs.pret * item.cantitate,
@@ -29,13 +29,48 @@ function CartPage() {
                 {items.map((item) => (
                     <li key={item.produs.id}>
                         <h2>{item.produs.nume}</h2>
-                        <p>
-                            Cantitate: {item.cantitate} x {item.produs.pret} lei
-                        </p>
+
+                        <div>
+                            <button
+                                type="button"
+                                onClick={() => 
+                                    actualizeazaCantitate(
+                                        item.produs.id, 
+                                        item.cantitate - 1
+                                    )
+                                }
+                            >
+                                -
+                            </button>
+
+                            <span>Cantitate: {item.cantitate} </span>
+
+                            <button
+                                type="button"
+                                onClick={() =>
+                                    actualizeazaCantitate(
+                                        item.produs.id,
+                                        item.cantitate + 1
+                                    )
+                                }
+                            >
+                                +
+                            </button>
+                        </div>
+                        
                         <p>
                             Subtotal: {item.cantitate * item.produs.pret} lei
                         </p>
                         <Link to={`/products/${item.produs.id}`}>Vezi detalii</Link>
+
+                        <button
+                            type="button"
+                            onClick={() => 
+                                stergeProdus(item.produs.id)
+                            }
+                        >
+                            Elimina Produsul
+                        </button>
                     </li>
                 ))}
             </ul>

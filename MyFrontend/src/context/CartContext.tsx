@@ -9,6 +9,8 @@ export interface CartItem {
 type CartContextType = {
     items: CartItem[]
     adaugaProdus: (produs: Produs) => void
+    actualizeazaCantitate: (produsId: number, cantitateNoua: number) => void
+    stergeProdus: (produsId: number) => void
 }
 
 export const CartContext = createContext<CartContextType | undefined>(undefined)
@@ -25,8 +27,8 @@ export function CartProvider({children}: {children: ReactNode}) {
             if(itemExistent) {
                 return itemsCurente.map((item) =>
                     item.produs.id == produs.id
-                    ?{...item, cantitate: item.cantitate + 1}
-                    :item
+                        ?{...item, cantitate: Math.min(item.cantitate + 1, produs.stoc)}
+                        :item
                 )
                  
             }
@@ -34,8 +36,44 @@ export function CartProvider({children}: {children: ReactNode}) {
         })
 
     }
+
+    function actualizeazaCantitate(produsId: number, cantitateNoua: number) {
+        setItems((itemsCurente) => {
+            const itemExistent = itemsCurente.find(
+                (item) => item.produs.id === produsId
+            )
+
+            if(!itemExistent){
+                return itemsCurente
+            }
+
+            if(cantitateNoua <= 0) {
+                return itemsCurente.filter(
+                    (item) => item.produs.id !== produsId
+                )
+            }
+
+            const cantitateValida = Math.min(
+                cantitateNoua,
+                itemExistent.produs.stoc
+            )
+
+            return itemsCurente.map((item) => 
+                item.produs.id === produsId 
+                    ? {...item, cantitate: cantitateValida}
+                    : item
+            )
+        })
+    }
+
+    function stergeProdus(produsId: number) {
+        setItems((itemsCurente) => 
+            itemsCurente.filter((item) => 
+                item.produs.id !== produsId
+        ))
+    }
      return (
-    <CartContext.Provider value={{ items, adaugaProdus }}>
+    <CartContext.Provider value={{ items, adaugaProdus, actualizeazaCantitate, stergeProdus }}>
       {children}
     </CartContext.Provider>
   )
