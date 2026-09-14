@@ -1,4 +1,4 @@
-import { createContext, useContext,  useState, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 import type { Produs } from "../types/Produs";
 
 export interface CartItem {
@@ -16,7 +16,22 @@ type CartContextType = {
 export const CartContext = createContext<CartContextType | undefined>(undefined)
 
 export function CartProvider({children}: {children: ReactNode}) {
-    const [items, setItems] = useState<CartItem[]>([])
+    const [items, setItems] = useState<CartItem[]>(() => {
+        const cartSalvat = localStorage.getItem('cart')
+        if(!cartSalvat) {
+            return []
+        }
+
+        try {
+            return JSON.parse(cartSalvat) as CartItem[]
+        } catch {
+            return []
+        }
+    })
+
+    useEffect(() => {
+        localStorage.setItem('cart', JSON.stringify(items))
+    }, [items])
 
     function adaugaProdus(produs: Produs) {
         setItems((itemsCurente) => {
