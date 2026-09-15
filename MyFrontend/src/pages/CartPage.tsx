@@ -76,6 +76,7 @@ function CartPage() {
             </ul>
 
             <h2>Total: {total} lei</h2>
+            <Link to="/checkout">Finalizeaza comanda</Link>
         </div>
     )
 }

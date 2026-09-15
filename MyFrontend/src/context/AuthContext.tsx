@@ -13,18 +13,18 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({children}: {children: ReactNode}) {
     const [user, setUser] = useState<User | null>(null)
-    const [accessToken, setAccesToken] = useState<string | null>(null)
+    const [accessToken, setAccessToken] = useState<string | null>(null)
 
     async function autentifica(dateLogin: LoginRequest) {
         const raspuns = await login(dateLogin)
 
         setUser(raspuns.userDto)
-        setAccesToken(raspuns.accesToken)
+        setAccessToken(raspuns.accessToken)
     }
 
     function delogheaza() {
         setUser(null)
-        setAccesToken(null)
+        setAccessToken(null)
     }
 
     return (

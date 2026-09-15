@@ -11,6 +11,6 @@ export interface User {
 
 export interface LoginResponse {
     userDto: User
-    accesToken: string
+    accessToken: string
     refreshToken: string
 }
