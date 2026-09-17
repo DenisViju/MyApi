@@ -7,6 +7,8 @@ using MyApi.Data;
 using MyApi.Middleware;
 using MyApi.Repository;
 using MyApi.Services;
+using System.Text.Json.Serialization;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -76,6 +78,15 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 });
+
+
+
+builder.Services
+    .AddControllers()
+    .AddJsonOptions(options =>
+        options.JsonSerializerOptions.Converters.Add(
+            new JsonStringEnumConverter()
+        ));
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
