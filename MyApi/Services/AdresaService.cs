@@ -48,7 +48,11 @@ namespace MyApi.Services
             if(adresaNoua.EstePrincipala)
             {
                 Adresa? adresaPrincipalaActuala = await repository.ObtineAdresaPrincipalaAsync(userId, cancellationToken);
-                if(adresaPrincipalaActuala != null)
+                if (adresaPrincipalaActuala == null)
+                {
+                    adresaNoua.EstePrincipala = true;
+                }
+                else if (adresaNoua.EstePrincipala)
                 {
                     adresaPrincipalaActuala.EstePrincipala = false;
                 }
