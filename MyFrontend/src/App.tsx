@@ -10,7 +10,9 @@ import Navbar from './components/Navbar'
 import CartPage from './pages/CartPage'
 import LoginPage from './pages/LoginPage'
 import CheckoutPage from './pages/CheckoutPage'
+import AddAddressPage from './pages/AddAddressPage'
 import ProtectedRoute from './components/ProtectedRoute'
+
 
 function App() {
   return (
@@ -27,6 +29,7 @@ function App() {
             <Route path="/login" element = {<LoginPage />}></Route>
             <Route element={<ProtectedRoute />}>
               <Route path="/checkout" element={<CheckoutPage />} />
+              <Route path="/addresses/new" element={<AddAddressPage />} />
             </Route>
           </Routes>
         </CartProvider>
