@@ -1,13 +1,21 @@
 import { useEffect, useState } from "react"
+import { Link } from 'react-router-dom'
 import { getAdresses } from "../api/AdressesApi"
 import { useAuth } from "../context/AuthContext"
+import { useCart } from "../context/CartContext"
+import { createOrder } from "../api/OrdersApi"
 import type { Adresa } from "../types/Adresa"
+import type { Comanda, ComandaCreateRequest} from "../types/Comanda"
 
 function CheckoutPage() {
     const { accessToken } = useAuth()
+    const {items, golesteCos} = useCart()
 
     const [adrese, setAdrese] = useState<Adresa[]>([])
     const [adresaSelectataId, setAdresaSelectataId] = useState<number | null>(null)
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [submitError, setSubmitError] = useState<string | null>(null)
+    const [comandaConfirmata, setComandaConfirmata] = useState<Comanda | null>(null)
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
 
@@ -44,12 +52,72 @@ function CheckoutPage() {
         loadAdresses()
     } ,[accessToken])
 
+    async function handlePlaceOrder() {
+        if(!accessToken) {
+            setSubmitError('Nu esti autentificat')
+            return
+        }
+
+        if(!adresaSelectataId) {
+            setSubmitError('Alege o adresa de livrare')
+            return
+        }
+
+        if(items.length === 0) {
+            setSubmitError('Cosul este gol')
+            return
+        }
+
+        const comandaNoua: ComandaCreateRequest = {
+            adresaId: adresaSelectataId,
+            elementeComandaCreateDto: items.map((item) => ({
+                produsId: item.produs.id,
+                cantitate: item.cantitate,
+            }))
+        }
+
+        try{
+            setIsSubmitting(true)
+            setSubmitError(null) 
+            
+            const comandaCreata = await createOrder(
+                comandaNoua,
+                accessToken
+            )
+
+            setComandaConfirmata(comandaCreata)
+            golesteCos()
+        } catch(error: unknown) {
+            if(error instanceof Error) {
+                setSubmitError(error.message)
+            } else {
+                setSubmitError('A aparut o eroare necunoscuta')
+            }
+        } finally {
+            setIsSubmitting(false)
+        }
+    }
+
     if(isLoading) {
     return <p>Se incarca Adresele</p>
     }
 
     if(error) {
         return <p>{error}</p>
+    }
+    
+    if(comandaConfirmata) {
+        return(
+            <div>
+                <h1>Comanda a fost plasata</h1>
+
+                <p>Numar comanda: {comandaConfirmata.id}</p>
+                <p>Status: {comandaConfirmata.status}</p>
+                <p>Total: {comandaConfirmata.total}</p>
+
+                <Link to="/products">Continua cumparaturile</Link>
+            </div>
+        )
     }
 
     return (
@@ -78,6 +146,17 @@ function CheckoutPage() {
                     ))}
                 </fieldset>
             )}
+            {submitError && <p>{submitError}</p>}
+            <button
+                type="button"
+                onClick={handlePlaceOrder}
+                disabled={
+                    isSubmitting ||  items.length === 0 || !adresaSelectataId
+                }
+            >
+                {isSubmitting ? 'Se plaseaza comanda..' : 'Plaseaza comanda'}
+            </button>
+
         </div>
     )
 }

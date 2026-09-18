@@ -11,6 +11,7 @@ type CartContextType = {
     adaugaProdus: (produs: Produs) => void
     actualizeazaCantitate: (produsId: number, cantitateNoua: number) => void
     stergeProdus: (produsId: number) => void
+    golesteCos: () => void
 }
 
 export const CartContext = createContext<CartContextType | undefined>(undefined)
@@ -87,8 +88,13 @@ export function CartProvider({children}: {children: ReactNode}) {
                 item.produs.id !== produsId
         ))
     }
+
+    function golesteCos() {
+        setItems([])
+    }
+
      return (
-    <CartContext.Provider value={{ items, adaugaProdus, actualizeazaCantitate, stergeProdus }}>
+    <CartContext.Provider value={{ items, adaugaProdus, actualizeazaCantitate, stergeProdus, golesteCos }}>
       {children}
     </CartContext.Provider>
   )

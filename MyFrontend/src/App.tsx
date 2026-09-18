@@ -26,8 +26,8 @@ function App() {
             <Route path="/cart" element = {<CartPage />} ></Route>
             <Route path="/login" element = {<LoginPage />}></Route>
             <Route element={<ProtectedRoute />}>
-            <Route path="/checkout" element={<CheckoutPage />} />
-          </Route>
+              <Route path="/checkout" element={<CheckoutPage />} />
+            </Route>
           </Routes>
         </CartProvider>
       </AuthProvider>
