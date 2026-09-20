@@ -12,5 +12,4 @@ export interface User {
 export interface LoginResponse {
     userDto: User
     accessToken: string
-    refreshToken: string
 }

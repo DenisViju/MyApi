@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using MyApi.Common;
 using MyApi.Configuration;
 using MyApi.DTOs.User;
+using MyApi.Enums;
 using MyApi.Services;
 using System.Security.Claims;
 
@@ -102,7 +103,7 @@ namespace MyApi.Controllers
             if(!Request.Cookies.TryGetValue(RefreshTokenCookieName, out string? refreshToken)
                 || string.IsNullOrEmpty(refreshToken))
             {
-                return Unauthorized();
+                return HandleError(ResultErrorType.Unauthorized, "Nu esti autentificat");
             }
 
             Result<LoginResponseDto> result = await service.

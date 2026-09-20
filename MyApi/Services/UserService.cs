@@ -181,6 +181,8 @@ namespace MyApi.Services
 
                 await refreshTokenRepository.SalveazaAsync(newRefreshTokenEntity, cancellationToken);
 
+                await tranzactie.CommitAsync(cancellationToken);
+
                 return Result<LoginResponseDto>.Ok(Mappers.UserMapper
                     .ToLoginResponseDto(user, accessToken, newRefreshToken));
             } 
