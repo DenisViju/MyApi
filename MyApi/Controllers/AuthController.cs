@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using MyApi.Common;
+using MyApi.Configuration;
 using MyApi.DTOs.User;
 using MyApi.Services;
 using System.Security.Claims;
@@ -11,11 +13,16 @@ namespace MyApi.Controllers
     [Route("api/[controller]")]
     public class AuthController : BaseController
     {
-        private readonly IUserService service;
+        private const string RefreshTokenCookieName = "refreshToken";
 
-        public AuthController(IUserService service)
+        private readonly IUserService service;
+        private readonly IOptions<JwtOptions> jwtOptions;
+
+
+        public AuthController(IUserService service, IOptions<JwtOptions> jwtOptions)
         {
             this.service = service;
+            this.jwtOptions = jwtOptions;
         }
 
         [HttpPost("register")]
@@ -41,7 +48,11 @@ namespace MyApi.Controllers
             {
                return HandleError(result.ErrorType, result.Error);
             }
+
+            SetRefreshTokenCookie(result.Data!.RefreshToken);
+
             return Ok(result.Data);
+
         }
 
         [HttpPut("{id}/reset-password")]
@@ -86,33 +97,61 @@ namespace MyApi.Controllers
 
         [HttpPost("refresh")]
         public async Task<ActionResult<LoginResponseDto>> Refresh
-            ([FromBody] RefreshTokenDto refreshTokenDto, CancellationToken cancellationToken)
+            (CancellationToken cancellationToken)
         {
+            if(!Request.Cookies.TryGetValue(RefreshTokenCookieName, out string? refreshToken)
+                || string.IsNullOrEmpty(refreshToken))
+            {
+                return Unauthorized();
+            }
+
             Result<LoginResponseDto> result = await service.
-                RefreshTokenAsync(refreshTokenDto.RefreshToken, cancellationToken);
+                RefreshTokenAsync(refreshToken, cancellationToken);
 
             if (!result.Success)
             {
+                ClearRefreshTokenCookie();
                 return HandleError(result.ErrorType, result.Error);
             }
+
+            SetRefreshTokenCookie(result.Data!.RefreshToken);
 
             return Ok(result.Data);
         }
 
         [HttpPost("logout")]
         public async Task<IActionResult> Logout
-            ([FromBody] RefreshTokenDto refreshTokenDto, CancellationToken cancellationToken)
+            (CancellationToken cancellationToken)
         {
-            Result<bool> result = await service.
-                LogoutAsync(refreshTokenDto.RefreshToken, cancellationToken);
-
-            if(!result.Success)
+            if (Request.Cookies.TryGetValue(RefreshTokenCookieName, out string? refreshToken) &&
+               !string.IsNullOrEmpty(refreshToken))
             {
-                return HandleError(result.ErrorType, result.Error);
+                await service.LogoutAsync(refreshToken, cancellationToken);
             }
+
+            ClearRefreshTokenCookie();
 
             return NoContent();
         }
 
+        private void SetRefreshTokenCookie(string refreshToken)
+        {
+            Response.Cookies.Append(RefreshTokenCookieName, refreshToken, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                Expires = DateTimeOffset.UtcNow.AddDays(jwtOptions.Value.RefreshTokenExpiryDays),
+                Path = "/api/Auth"
+            });
+        }
+
+        private void ClearRefreshTokenCookie()
+        {
+            Response.Cookies.Delete(RefreshTokenCookieName, new CookieOptions
+            {
+                Path = "/api/Auth"
+            });
+        }
     }
 }

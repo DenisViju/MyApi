@@ -111,7 +111,7 @@ function CheckoutPage() {
             <div>
                 <h1>Nu ai nicio adresa de livrare</h1>
 
-                <Link to="/addAddress">Adauga o adresa</Link>
+                <Link to="/addresses">Adauga o adresa</Link>
             </div>
         )
     }
