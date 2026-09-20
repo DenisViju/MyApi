@@ -156,26 +156,39 @@ namespace MyApi.Services
 
             User user = refreshTokenEntity.User;
 
-            //de adaugat un transactions pentru revoca si salveaza async
-             await refreshTokenRepository
-                .RevocaAsync(refreshTokenEntity, cancellationToken);
-
-            string accessToken = tokenService.GenereazaJWT(user);
-            string newRefreshToken = tokenService.GenereazaRefreshToken();
-
-            var newRefreshTokenEntity = new RefreshToken
+            //am adaugat o tranzactie explicita aici, dar o alta varianta ar fi fost sa am metode separet
+            //pentru salveazaModificarileAsync() si RevocaAsync() astfel incat doar salveazaModificarileAsync
+            //sa apeleze saveChangesAsync() si restul nu. Pentru varianta asta ar fi trebuit sa modific si
+            //functia logoutAsync
+            await using var tranzactie = await refreshTokenRepository
+                 .IncepeTranzactieAsync(cancellationToken);
+            try
             {
-                Token = newRefreshToken,
-                ExpiresAt = DateTime.UtcNow.AddDays(
-                options.Value.RefreshTokenExpiryDays),
-                IsRevoked = false,
-                UserId = user.Id
-            };
+                await refreshTokenRepository
+                    .RevocaAsync(refreshTokenEntity, cancellationToken);
 
-            await refreshTokenRepository.SalveazaAsync(newRefreshTokenEntity,cancellationToken);
+                string accessToken = tokenService.GenereazaJWT(user);
+                string newRefreshToken = tokenService.GenereazaRefreshToken();
 
-            return Result<LoginResponseDto>.Ok(Mappers.UserMapper
-                .ToLoginResponseDto(user,accessToken, newRefreshToken));
+                var newRefreshTokenEntity = new RefreshToken
+                {
+                    Token = newRefreshToken,
+                    ExpiresAt = DateTime.UtcNow.AddDays(
+                    options.Value.RefreshTokenExpiryDays),
+                    IsRevoked = false,
+                    UserId = user.Id
+                };
+
+                await refreshTokenRepository.SalveazaAsync(newRefreshTokenEntity, cancellationToken);
+
+                return Result<LoginResponseDto>.Ok(Mappers.UserMapper
+                    .ToLoginResponseDto(user, accessToken, newRefreshToken));
+            } 
+            catch
+            {
+                await tranzactie.RollbackAsync(cancellationToken);
+                throw;
+            }
         }
 
         public async Task<Result<bool>> LogoutAsync(string refreshToken, CancellationToken cancellationToken)

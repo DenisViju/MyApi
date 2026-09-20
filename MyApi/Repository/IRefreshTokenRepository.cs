@@ -1,4 +1,5 @@
-﻿using MyApi.Models;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using MyApi.Models;
 namespace MyApi.Repository
 {
     public interface IRefreshTokenRepository
@@ -6,5 +7,6 @@ namespace MyApi.Repository
         Task<RefreshToken?> ObtineDupaTokenAsync(string token, CancellationToken cancellationToken);
         Task SalveazaAsync(RefreshToken refreshToken, CancellationToken cancellationToken);
         Task RevocaAsync(RefreshToken refreshToken, CancellationToken cancellationToken);
+        Task<IDbContextTransaction> IncepeTranzactieAsync(CancellationToken cancellationToken);
     }
 }

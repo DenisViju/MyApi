@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using MyApi.Data;
 using MyApi.Models;
 
@@ -31,6 +32,10 @@ namespace MyApi.Repository
         {
             refreshToken.IsRevoked = true;
             await context.SaveChangesAsync(cancellationToken);
+        }
+        public async Task<IDbContextTransaction> IncepeTranzactieAsync(CancellationToken cancellationToken)
+        {
+            return await context.Database.BeginTransactionAsync(cancellationToken);
         }
     }
 }
