@@ -23,6 +23,8 @@ builder.Services.AddScoped<ICategorieService, CategorieService>();
 builder.Services.AddScoped<IAdresaService, AdresaService>();
 builder.Services.AddScoped<IComandaService, ComandaService>();
 
+builder.Services.AddHostedService<RefreshTokenCleanupService>();
+
 builder.Services.AddControllers();
 builder.Services.AddProblemDetails();
 
