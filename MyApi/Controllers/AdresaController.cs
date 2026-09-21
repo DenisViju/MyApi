@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyApi.DTOs.Adresa;
+using MyApi.Enums;
 using MyApi.Services;
 
 namespace MyApi.Controllers
@@ -23,7 +24,7 @@ namespace MyApi.Controllers
             var userId = ObtineUserId();
             if(userId == -1)
             {
-                return Unauthorized();
+                return HandleError(ResultErrorType.Unauthorized, "Nu esti autentificat");
             }
 
             var result = await service.ObtineAdreseleUseruluiAsync(userId, cancellationToken);
@@ -42,7 +43,7 @@ namespace MyApi.Controllers
             var userId = ObtineUserId();
             if (userId == -1)
             {
-                return Unauthorized();
+                return HandleError(ResultErrorType.Unauthorized, "Nu esti autentificat");
             }
 
             var result = await service.ObtineAdresaAsync(id, userId, cancellationToken);
@@ -62,7 +63,7 @@ namespace MyApi.Controllers
             var userId = ObtineUserId();
             if (userId == -1)
             {
-                return Unauthorized();
+                return HandleError(ResultErrorType.Unauthorized, "Nu esti autentificat");
             }
 
             var result = await service.AdaugaAdresaAsync(adresaCreateDto, userId, cancellationToken);
@@ -83,7 +84,7 @@ namespace MyApi.Controllers
             var userId = ObtineUserId();
             if (userId == -1)
             {
-                return Unauthorized();
+                return HandleError(ResultErrorType.Unauthorized, "Nu esti autentificat");
             }
 
             var result = await service.ActualizeazaAdresaAsync(adresaUpdateDto, id, userId, cancellationToken);
@@ -103,7 +104,7 @@ namespace MyApi.Controllers
             var userId = ObtineUserId();
             if (userId == -1)
             {
-                return Unauthorized();
+                return HandleError(ResultErrorType.Unauthorized, "Nu esti autentificat");
             }
 
             var result = await service.StergeAdresaAsync(id, userId, cancellationToken);
