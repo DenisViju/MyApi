@@ -20,3 +20,15 @@ export interface AdresaCreateRequest {
     numarTelefon: string
     estePrincipala: boolean
 }
+
+export interface AdresaEditRequest {
+    numeDestinatar: string
+    strada: string
+    oras: string
+    judet: string
+    codPostal: string
+    tara: string
+    numarTelefon: string
+    estePrincipala: boolean
+}
+

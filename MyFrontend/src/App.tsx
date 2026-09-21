@@ -14,6 +14,7 @@ import CheckoutPage from './pages/CheckoutPage'
 import AddAddressPage from './pages/AddAddressPage'
 import ProfilePage from './pages/ProfilePage'
 import AddressesPage from './pages/AddressesPage'
+import EditAddressPage from './pages/EditAddressPage'
 import ProtectedRoute from './components/ProtectedRoute'
 
 
@@ -31,11 +32,12 @@ function App() {
             <Route path="/cart" element = {<CartPage />} ></Route>
             <Route path="/login" element = {<LoginPage />}></Route>
             <Route path="/register" element = {<RegisterPage />}></Route>
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/addresses" element={<AddressesPage />} />
             <Route element={<ProtectedRoute />}>
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/addresses/new" element={<AddAddressPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/addresses" element={<AddressesPage />} />
+              <Route path="/addresses/:id/edit" element={<EditAddressPage />}/>
             </Route>
           </Routes>
         </CartProvider>

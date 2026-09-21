@@ -1,5 +1,5 @@
 import { ApiError } from "./ApiError";
-import type { Adresa, AdresaCreateRequest } from "../types/Adresa";
+import type { Adresa, AdresaCreateRequest, AdresaEditRequest } from "../types/Adresa";
 
 const API_URL = import.meta.env.VITE_API_URL
 
@@ -67,4 +67,52 @@ export async function deleteAddress(
         )
     }
 
+}
+
+export async function editAddress(
+    adresaEditata: AdresaEditRequest,
+    id: number,
+    accessToken: string
+) : Promise<Adresa> {
+    const response = await fetch(`${API_URL}/api/Adresa/${id}`, {
+        method: 'PUT',
+        headers: {
+            'content-type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(adresaEditata)
+    })
+
+    if(!response.ok) {
+        const problemDetails = await response.json()
+
+        throw new ApiError(
+            response.status,
+            problemDetails.title ?? 'Adresa nu a putut fi editata'
+        )
+    }
+
+    return response.json()
+}
+
+export async function getAddress (
+    id: number,
+    accessToken: string
+) : Promise<Adresa> {
+    const response = await fetch(`${API_URL}/api/Adresa/${id}`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    })
+
+    if(!response.ok) {
+        const problemDetails = await response.json()
+
+        throw new ApiError(
+            response.status,
+            problemDetails.title ?? 'Adresa nu a putut fi incarcata'
+        )
+    }
+
+    return response.json()
 }
