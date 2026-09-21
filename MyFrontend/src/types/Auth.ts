@@ -13,3 +13,8 @@ export interface LoginResponse {
     userDto: User
     accessToken: string
 }
+
+export interface RegisterRequest {
+    username: string
+    password: string
+}

@@ -1,5 +1,5 @@
 import { useState, type SyntheticEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
 function LoginPage() {
@@ -51,7 +51,7 @@ function LoginPage() {
                 <label>
                     Parola
                     <input 
-                        type="text"
+                        type="password"
                         value = {password}
                         onChange={(event) => setPassword(event.target.value)}
                         autoComplete="current-password"
@@ -64,6 +64,10 @@ function LoginPage() {
                 <button type="submit" disabled={isSubmitting}>
                     {isSubmitting ? 'Se autentifica' : 'Autentificare'}
                 </button>
+
+                <p>
+                    Nu ai cont? <Link to="/register">Inregistreaza-te</Link>
+                </p>
             </form>
         </div>
     )

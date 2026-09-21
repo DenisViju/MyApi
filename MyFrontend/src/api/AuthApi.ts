@@ -1,5 +1,5 @@
 import { ApiError } from "./ApiError";
-import type { LoginRequest, LoginResponse } from "../types/Auth";
+import type { LoginRequest, LoginResponse, User, RegisterRequest } from "../types/Auth";
 
 const API_URL = import.meta.env.VITE_API_URL
 
@@ -52,5 +52,26 @@ export async function logout() : Promise<void> {
         method: `POST`,
         credentials: 'include'
     })
+}
+
+export async function register(dateRegister: RegisterRequest
+) : Promise<User> {
+    const response = await fetch(`${API_URL}/api/Auth/register`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dateRegister)
+    })
+
+    if(!response.ok) {
+        const problemDetails = await response.json()
+
+        throw new ApiError(
+            response.status,
+            problemDetails.title ?? 'Inregistrarea a esuat'
+        )
+    }
+    return response.json()
 }
 
