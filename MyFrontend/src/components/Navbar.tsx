@@ -22,11 +22,14 @@ function Navbar() {
 
         {user ?  (
             <>
+                <Link to="/profile">Profilul meu</Link>
                 <span>Salut, {user.username}</span>
+                
 
                 <button type="button" onClick={delogheaza}> 
                     Deconectare
                 </button>
+                
             </>
         ) : (
             <Link to="/login">Autentificare</Link>

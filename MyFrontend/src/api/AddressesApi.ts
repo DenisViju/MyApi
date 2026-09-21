@@ -47,3 +47,24 @@ export async function createAddress(
 
     return response.json()
 }
+
+export async function deleteAddress(
+    id: number,
+    accessToken: string,
+) : Promise<void> {
+    const response = await fetch(`${API_URL}/api/Adresa/${id}`, {
+        method: 'DELETE',
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    })
+    if(!response.ok) {
+        const problemDetails = await response.json()
+
+        throw new ApiError(
+            response.status,
+            problemDetails.title ?? 'Adresa nu a putut fi stearsa'
+        )
+    }
+
+}
