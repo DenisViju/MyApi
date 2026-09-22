@@ -53,6 +53,15 @@ function OrdersPage() {
                     <OrderDetails 
                         key={order.id}
                         order={order}
+                        onCancelled={(comandaAnulata) => {
+                            setOrders((orders) => 
+                                orders.map((o) => 
+                                    o.id === comandaAnulata.id
+                                    ? comandaAnulata
+                                    : o
+                                )
+                            )
+                        }}
                     />
                 ))
             )}

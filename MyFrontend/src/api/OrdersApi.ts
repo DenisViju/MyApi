@@ -49,3 +49,49 @@ export async function getOrders(accessToken: string) : Promise<Comanda[]> {
     return response.json()
 }
 
+export async function getOrder(
+    id: number,
+    accessToken: string,
+) : Promise<Comanda> {
+    const response = await fetch(`${API_URL}/api/Comanda/${id}`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    })
+
+    if(!response.ok) {
+        const problemDetails = await response.json()
+
+        throw new ApiError(
+            response.status,
+            problemDetails.title ?? 'Nu s-a putut incarca comanda'
+        )
+    }
+
+    return response.json()
+}
+
+export async function cancelOrder(
+    id: number,
+    accessToken: string
+) : Promise<Comanda> {
+    const response = await fetch(`${API_URL}/api/Comanda/${id}/anulare`, {
+        method: 'POST',
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    })
+
+    if(!response.ok) {
+        const problemDetails = await response.json()
+
+        throw new ApiError(
+            response.status,
+            problemDetails.title ?? 'Comanda nu a putut fi anulata'
+        )
+    }
+
+    return response.json()
+}
+
+

@@ -19,7 +19,10 @@ namespace MyApi.Mappers
                 CodPostal = comanda.CodPostal,
                 NumeDestinatar = comanda.NumeDestinatar,
                 TelefonDestinatar = comanda.TelefonDestinatar,
-                DataCrearii = comanda.DataCrearii,
+                DataCrearii = DateTime.SpecifyKind(
+                    comanda.DataCrearii,
+                    DateTimeKind.Utc
+                ),
                 Status = comanda.Status,
                 Total = comanda.Total,
                 ElementeComanda = elementeComandaDto,

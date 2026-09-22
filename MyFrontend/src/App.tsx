@@ -16,6 +16,7 @@ import ProfilePage from './pages/ProfilePage'
 import AddressesPage from './pages/AddressesPage'
 import EditAddressPage from './pages/EditAddressPage'
 import OrdersPage from './pages/OrdersPage'
+import OrderDetailsPage from './pages/OrderDetailsPage'
 import ProtectedRoute from './components/ProtectedRoute'
 
 
@@ -38,8 +39,9 @@ function App() {
               <Route path="/addresses/new" element={<AddAddressPage />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/addresses" element={<AddressesPage />} />
-              <Route path="/addresses/:id/edit" element={<EditAddressPage />}/>
+              <Route path="/addresses/:id/edit" element={<EditAddressPage />} />
               <Route path="/orders" element={<OrdersPage />}/>
+              <Route path="/orders/:id" element={<OrderDetailsPage />} />
             </Route>
           </Routes>
         </CartProvider>
