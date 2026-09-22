@@ -190,6 +190,13 @@ namespace MyApi.Services
                     "Comanda nu mai poate fi anulata",
                     Enums.ResultErrorType.BadRequest);
             }
+            TimeSpan timpulScursDeLaCreareaComenzii = DateTime.UtcNow - comanda.DataCrearii;
+            if(timpulScursDeLaCreareaComenzii.TotalMinutes > 30)
+            {
+                return Result<ComandaDto>.Fail(
+                    "A expirat timpul de anulare (30 minute). Comanda nu mai poate fi anulata",
+                    Enums.ResultErrorType.BadRequest);
+            }
 
             comanda.Status = Enums.StatusComanda.Anulata;
             try

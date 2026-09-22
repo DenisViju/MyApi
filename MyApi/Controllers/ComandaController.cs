@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MyApi.Common;
 using MyApi.DTOs.Comanda;
+using MyApi.Enums;
 using MyApi.Services;
 
 namespace MyApi.Controllers
@@ -19,12 +20,13 @@ namespace MyApi.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<List<ComandaDto>>> ObtineComenzi(CancellationToken cancellationToken)
         {
             int userId = ObtineUserId();
             if (userId == -1)
             {
-                return Unauthorized();
+                return HandleError(ResultErrorType.Unauthorized, "Nu esti autentificat");
             }
 
             var result = await service.ObtineComenzileUseruluiAsync(userId, cancellationToken);
@@ -33,12 +35,13 @@ namespace MyApi.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<ComandaDto>> ObtineComanda(int id, CancellationToken cancellationToken)
         {
             int userId = ObtineUserId();
             if (userId == -1)
             {
-                return Unauthorized();
+                return HandleError(ResultErrorType.Unauthorized, "Nu esti autentificat");
             }
 
             var result = await service.ObtineComandaAsync(id, userId, cancellationToken);
@@ -53,13 +56,14 @@ namespace MyApi.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<ComandaDto>> CreeazaComanda
             ([FromBody] ComandaCreateDto comandaCreateDto, CancellationToken cancellationToken)
         {
             int userId = ObtineUserId();
             if (userId == -1)
             {
-                return Unauthorized();
+                return HandleError(ResultErrorType.Unauthorized, "Nu esti autentificat");
             }
 
             var result = await service.CreeazaComandaAsync(comandaCreateDto, userId, cancellationToken);
@@ -73,12 +77,13 @@ namespace MyApi.Controllers
         }
 
         [HttpPost("{id}/anulare")]
+        [Authorize]
         public async Task<ActionResult<ComandaDto>> AnuleazaComanda(int id, CancellationToken cancellationToken)
         {
             int userId = ObtineUserId();
             if (userId == -1)
             {
-                return Unauthorized();
+                return HandleError(ResultErrorType.Unauthorized, "Nu esti autentificat");
             }
 
             var result = await service.AnuleazaComandaAsync(id, userId, cancellationToken);
