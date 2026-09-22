@@ -150,6 +150,7 @@ function EditAddressPage() {
                         name="numeDestinatar"
                         value={formular.numeDestinatar}
                         onChange={handleChange}
+                        required
                     />
                 </div>
 
@@ -163,6 +164,7 @@ function EditAddressPage() {
                         name="strada"
                         value={formular.strada}
                         onChange={handleChange}
+                        required
                     />
                 </div>
 
@@ -176,6 +178,7 @@ function EditAddressPage() {
                         name="oras"
                         value={formular.oras}
                         onChange={handleChange}
+                        required
                     />
                 </div>
 
@@ -189,6 +192,7 @@ function EditAddressPage() {
                         name="judet"
                         value={formular.judet}
                         onChange={handleChange}
+                        required
                     />
                 </div>
 
@@ -202,6 +206,7 @@ function EditAddressPage() {
                         name="codPostal"
                         value={formular.codPostal}
                         onChange={handleChange}
+                        required
                     />
                 </div>
 
@@ -215,6 +220,7 @@ function EditAddressPage() {
                         name="tara"
                         value={formular.tara}
                         onChange={handleChange}
+                        required
                     />
                 </div>
 
@@ -228,6 +234,7 @@ function EditAddressPage() {
                         name="numarTelefon"
                         value={formular.numarTelefon}
                         onChange={handleChange}
+                        required
                     />
                 </div>
 
@@ -239,6 +246,7 @@ function EditAddressPage() {
                             type="checkbox"
                             checked={formular.estePrincipala}
                             onChange={handleChange}
+                            required
                         />
 
                         Adresa principala

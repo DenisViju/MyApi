@@ -19,6 +19,9 @@ function ProfilePage() {
                     <li>
                         <Link to="/addresses">Adresele mele</Link>
                     </li>
+                    <li>
+                        <Link to="/orders">Comenzile mele</Link>
+                    </li>
                 </ul>
             </nav>
         </div>
