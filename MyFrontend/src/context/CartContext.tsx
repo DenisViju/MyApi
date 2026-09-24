@@ -8,7 +8,7 @@ export interface CartItem {
 
 type CartContextType = {
     items: CartItem[]
-    adaugaProdus: (produs: Produs) => void
+    adaugaProdus: (produs: Produs, cantitate: number) => void
     actualizeazaCantitate: (produsId: number, cantitateNoua: number) => void
     stergeProdus: (produsId: number) => void
     golesteCos: () => void
@@ -34,25 +34,36 @@ export function CartProvider({children}: {children: ReactNode}) {
         localStorage.setItem('cart', JSON.stringify(items))
     }, [items])
 
-    function adaugaProdus(produs: Produs) {
+    function adaugaProdus(produs: Produs, cantitate: number) {
         setItems((itemsCurente) => {
-            const itemExistent = itemsCurente.find (
+            const itemExistent = itemsCurente.find(
                 (item) => item.produs.id === produs.id
             )
 
-            if(itemExistent) {
+            if (itemExistent) {
                 return itemsCurente.map((item) =>
-                    item.produs.id == produs.id
-                        ?{...item, cantitate: Math.min(item.cantitate + 1, produs.stoc)}
-                        :item
+                    item.produs.id === produs.id
+                        ? {
+                            ...item,
+                            cantitate: Math.min(
+                                item.cantitate + cantitate,
+                                produs.stoc
+                            )
+                        }
+                        : item
                 )
-                 
             }
-            return [...itemsCurente, { produs, cantitate: 1 }]
+
+            return [
+                ...itemsCurente,
+                {
+                    produs,
+                    cantitate: Math.min(cantitate, produs.stoc)
+                }
+            ]
         })
-
     }
-
+    
     function actualizeazaCantitate(produsId: number, cantitateNoua: number) {
         setItems((itemsCurente) => {
             const itemExistent = itemsCurente.find(

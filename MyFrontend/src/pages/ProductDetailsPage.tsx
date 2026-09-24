@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { getProduct } from '../api/ProductsApi'
 import type { Produs } from '../types/Produs'
 import { useCart } from '../context/CartContext'
+import QuantitySelector from "../components/QuantitySelector"
 
 function ProductDetailsPage() {
     const { id } = useParams()
@@ -10,6 +11,7 @@ function ProductDetailsPage() {
     const [produs, setProdus] = useState<Produs | null>(null)
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
+    const [cantitate, setCantitate] = useState(1)
 
     useEffect( () => {
         async function LoadProduct() {
@@ -52,7 +54,12 @@ if(!produs) {
 }
 
 function handleAdaugaInCos() {
-  adaugaProdus(produs!)
+    if (!produs) {
+        return
+    }
+
+    adaugaProdus(produs!, cantitate)
+    setCantitate(1)
 }
 
 return (
@@ -64,6 +71,13 @@ return (
         <p>Categorie: {produs.numeCategorie}</p>
         <p>Preț: {produs.pret} lei</p>
         <p>Stoc: {produs.stoc}</p>
+        {produs.stoc > 0 && (
+            <QuantitySelector
+                cantitate={cantitate}
+                stoc={produs.stoc}
+                onChange={setCantitate}
+            />
+        )}
 
         <button
             type="button"

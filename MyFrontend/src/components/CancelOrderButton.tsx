@@ -13,8 +13,6 @@ function CancelOrderButton({ order, onCancelled }: Props) {
     const { accessToken } = useAuth();
     const [isCancelling, setIsCancelling] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    console.log("STATUS:", order.status);
-    console.log("POATE FI ANULATA:", comandaPoateFiAnulata(order));
 
     if (!comandaPoateFiAnulata(order)) {
         return null;
