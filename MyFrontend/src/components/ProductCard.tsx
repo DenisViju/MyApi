@@ -18,45 +18,66 @@ function ProductCard({ produs }: ProductCardProps) {
     }
 
     return (
-        <div>
-            <h2>{produs.nume}</h2>
+       <article className="product-card">
 
-            <p>{produs.descriere}</p>
-
-            <p>
-                Categorie: {produs.numeCategorie}
-            </p>
-
-            <p>{produs.pret} lei</p>
-
-            <p>Stoc: {produs.stoc}</p>
-
-            <Link to={`/products/${produs.id}`}>
-                Vezi detalii
+            <Link
+                className="product-card-image"
+                to={`/products/${produs.id}`}
+            >
+                <div>
+                    Produs
+                </div>
             </Link>
 
-            <br />
+            <div className="product-card-info">
+                
+                <p className="product-card-category">
+                    {produs.numeCategorie}
+                </p>
 
-            {produs.stoc > 0 && (
-                <QuantitySelector
-                    cantitate={cantitate}
-                    stoc={produs.stoc}
-                    onChange={setCantitate}
-                />
-            )}
+                <h2 className="product-card-name">
+                    {produs.nume}
+                </h2>
 
-            <br />
+                <p className="product-card-description">
+                    {produs.descriere}
+                </p>
 
-            <button
-                type="button"
-                onClick={handleAdaugaInCos}
-                disabled={produs.stoc === 0}
-            >
-                {produs.stoc === 0
-                    ? "Stoc epuizat"
-                    : "Adauga in cos"}
-            </button>
-        </div>
+                <p className="product-card-price">
+                    {produs.pret} lei
+                </p>
+
+                <p className="product-card-stock">
+                    {produs.stoc > 0 
+                        ?  `In stoc: ${produs.stoc}`
+                        : "Stoc epuizat"}
+                </p>
+            </div>
+
+            <div className="product-card-actions">
+
+                {produs.stoc > 0 && (
+                    <QuantitySelector 
+                        cantitate={cantitate}
+                        stoc={produs.stoc}
+                        onChange={setCantitate}
+                    />
+                )}
+
+                <button
+                    type="button"
+                    onClick={handleAdaugaInCos}
+                    disabled={produs.stoc === 0}
+                    className="product-card-button"
+                >
+                    {produs.stoc === 0 
+                        ? "Stoc epuizat"
+                        : "Adauga in cos"}
+                </button>
+
+            </div>
+
+       </article>
     )
 }
 
