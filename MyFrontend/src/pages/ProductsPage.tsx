@@ -3,7 +3,7 @@ import { getProducts } from '../api/ProductsApi'
 import type { Produs } from '../types/Produs'
 import type { ProdusFiltru } from '../types/ProdusFiltru'
 import type { Categorie } from '../types/Categorie'
-import ProductCard from '../components/ProductCard'
+import ProductGrid from '../components/ProductGrid'
 import { getCategories } from '../api/CategoriesApi'
 
 
@@ -291,12 +291,7 @@ function reseteazaFiltre() {
     {products.length === 0 ? (
         <p>Niciun produs gasit.</p>
     ) : (
-        products.map((product) => (
-            <ProductCard
-                key={product.id}
-                produs={product}
-            />
-        ))
+        <ProductGrid products={products} />
     )}
     {totalPages > 0 && (
       <div>

@@ -23,23 +23,26 @@ function QuantitySelector({
     }
 
     return (
-        <div>
-            <span>Cantitate: </span>
-
+        <div className="quantity-selector">
+            
             <button
                 type="button"
                 onClick={scadeCantitate}
                 disabled={cantitate === 1}
+                className="quantity-button"
             >
                 -
             </button>
 
-            <span> {cantitate} </span>
+            <span className="quantity-value">
+                {cantitate} 
+            </span>
 
             <button
                 type="button"
                 onClick={cresteCantitate}
                 disabled={cantitate === stoc}
+                className="quantity-button"
             >
                 +
             </button>
