@@ -1,3 +1,5 @@
+import "./QuantitySelector.css"
+
 type QuantitySelectorProps = {
     cantitate: number
     stoc: number

@@ -1,0 +1,38 @@
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  height: 42px;
+}
+
+.quantity-button {
+  width: 40px;
+  height: 100%;
+  border: none;
+  background: var(--bg);
+  color: var(--text-h);
+  font: inherit;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.quantity-button:hover:not(:disabled) {
+  background: var(--text-h);
+  color: var(--bg);
+  border-color: var(--text-h);
+  opacity: 0.9;
+}
+
+.quantity-button:disabled {
+  color: var(--border);
+  cursor: not-allowed;
+}
+
+.quantity-value {
+  min-width: 32px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+}

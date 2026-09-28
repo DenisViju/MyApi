@@ -3,6 +3,7 @@ import type { Produs } from "../types/Produs"
 import { Link } from "react-router-dom"
 import { useCart } from "../context/CartContext"
 import QuantitySelector from "./QuantitySelector"
+import "./ProductCard.css"
 
 type ProductCardProps = {
     produs: Produs
@@ -38,10 +39,6 @@ function ProductCard({ produs }: ProductCardProps) {
                 <h2 className="product-card-name">
                     {produs.nume}
                 </h2>
-
-                <p className="product-card-description">
-                    {produs.descriere}
-                </p>
 
                 <p className="product-card-price">
                     {produs.pret} lei
